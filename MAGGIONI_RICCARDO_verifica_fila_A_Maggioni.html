@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Biblioteca</title>
+</head>
+<body>
+    <h1>Biblioteca</h1>
+
+            <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+            Aggiungi libro
+        </button>
+
+        <table class="table" id="tabella">
+
+            <thead>
+          
+              <tr>
+          
+                <th scope="col">Titolo</th>
+                <th scope="col">Autore</th>
+                <th scope="col">Genere</th>
+                <th scope="col">Anno di pubblicazione</th>
+                <th scope="col">Libro restituito</th>
+          
+              </tr>
+          
+            </thead>
+          
+            <tbody id="output">
+          
+            </tbody>
+          
+          </table>
+          
+        <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Aggiungi libro all'inventario</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form>
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Titolo</label>
+                  <input type="text" class="form-control" id="Titolo">
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Autore</label>
+                  <input type="text" class="form-control" id="Autore">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Genere</label>
+                    <input type="text" class="form-control" id="Genere">
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">Anno pubblicazione</label>
+                    <input type="text" class="form-control" id="AnnoPubblicazione">
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleFormControlSelect1">Quale libro si vuole restituire?</label>
+                    <select class="form-control" type="text" id="RestitLibro" placeholder="Seleziona un libro">
+                    </select>
+                  </div>
+              </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
+          <button type="button" class="btn btn-primary" onclick="aggiungiLibro()">Aggiungi</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <script>
+        class Libro{
+            constructor(titolo,autore,genere,annoPubblicazione,disponibile){//Creazione del costruttore
+                this.titolo = titolo;
+                this.autore = autore;
+                this.genere = genere;
+                this.annoPubblicazione = annoPubblicazione;
+                this.disponibile = disponibile;
+            }
+
+            disponibile(){//Verifico se il libro è disponibile
+                return disponibile;
+            }
+        }
+
+        class Lettore{
+            constructor(nome,cognome,numeroTessera){//Creazione del costruttore
+                this.nome = nome;
+                this.cognome = cognome;
+                this.numeroTessera = numeroTessera;
+                this.vettPrestiti = [];
+            }
+
+            aggiungiPrestito(libro){//Aggiungo un libro nel vettore dei libri prestati
+                this.vettPrestiti.push(libro);
+            }
+
+            restituisciLibro(libro){//Rimuovo dal vettore dei libri prestati il libro che voglio restituire
+                this.vettPrestiti.pop(libro);
+            }
+        }
+
+        class Biblioteca{
+            constructor(){//Creazione del costruttore
+                this.vettLibri = [];//inventario
+                this.vettLibPrestiti = [];//prestiti
+                this.vettLettori = [];//lettori
+            }
+
+            aggiungiLibro(libro){//Aggiunta libro all'interno del vettore libri (ovvero l'inventario)
+                this.vettLibri.push(libro)
+            }
+
+            registraLettore(lettore){//registro lettore presso il vettore dei lettori (ovvero i lettori)
+                this.vettLettori.push(lettore);
+            }
+
+            effettuaPrestito(lettore,libro){//effettuo prestito aggiungendo il lettore ed il libro all'interno del vettore dei libri prestati (ovvero prestiti)
+                this.vettLibPrestiti.push(lettore,libro);
+            }
+
+            restituisciLibri(lettore,libro){//restituzione libri (rimuovo l'elemento dal vettore dei libri prestati e col lettore richiamo il metodo della restituzione del libro)
+                this.vettLibPrestiti.pop(libro);
+                lettore.restituisciLibro(libro);
+            }
+
+            listaLibriInPrestito(){//Mostro tramite il vettore la lista dei libri in prestito
+                    return this.vettLibPrestiti;
+            }
+        }
+
+        //Creazione biblioteca
+        let biblioteca = new Biblioteca();
+        
+        //Creazione libri
+        let libro1 = new Libro("1984","Wersel","Storico","2000",true);
+        let libro2 = new Libro("L'orso assassino","Levi","Horror","2005",true);
+
+        //Mostro tramite la console gli attributi dei libri
+        console.log(libro1);
+        console.log(libro1);
+
+        //Aggiunta libri all'inventario
+        biblioteca.aggiungiLibro(libro1);
+        biblioteca.aggiungiLibro(libro2);
+
+        //Creazione lettori
+        let lettore1 = new Lettore("Mario","Rossi",245);
+        let lettore2 = new Lettore("Luca","Bianchi",174);
+
+        //Mostro con la console gli attributi dei lettori
+        console.log(lettore1);
+        console.log(lettore2);
+
+        //Registrazione prestiti
+        biblioteca.effettuaPrestito(libro1);
+        biblioteca.effettuaPrestito(libro2);
+
+        //Restituzione dei libri che sono stati presi in prestito
+        biblioteca.restituisciLibri(lettore1,libro1);
+        biblioteca.restituisciLibri(lettore2,libro2);
+
+        //Elenco dei libri attualmente in prestito
+        biblioteca.listaLibriInPrestito();
+
+        //Aggiunta libro all'inventario
+        function aggiungiLibro(){
+            let titolo=document.getElementById("Titolo").value;
+            let autore=document.getElementById("Autore").value;
+            let genere=document.getElementById("Genere").value;
+            let annoPubblicazione=document.getElementById("AnnoPubblicazione").value;
+
+            libroInv=new Libro(titolo,autore,genere,annoPubblicazione);
+            biblioteca.vettLibri[libro].aggiungiLibro(libroInv);
+
+            let tbody=document.getElementById("output");
+            let stringa= tbody.innerHTML;
+
+            stringa+= `<tr><td>${biblioteca.vettLibri[libro].autore}</td>`;
+            stringa+= `<td>${titolo}</td>`;
+            stringa+= `<td>${autore}</td>`;
+            stringa+= `<td>${genere}</td>`;
+            stringa+= `<td>${annoPubblicazione}</td></tr>`;
+            
+
+            tbody.innerHTML=stringa;
+            
+    }
+    </script>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

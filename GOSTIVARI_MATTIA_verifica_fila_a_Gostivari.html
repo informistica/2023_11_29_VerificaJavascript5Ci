@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Verifica fila A Gostivari</title>
+</head>
+<body>
+
+    <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" onclick="lista_prestiti()">
+    lista libri in prestito
+  </button>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form>
+                  <div class="form-group">
+                    <select  name="prestiti" id="select_prestiti" aria-label="lista libri in prestito">
+                    </select>
+                  </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+   <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+    aggiungi libro
+  </button>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form>
+                <div class="form-group">
+                  <label for="exampleInputEmail1">titolo</label>
+                  <input type="text" class="form-control" id="titolo" aria-describedby="emailHelp" placeholder="inserisci il titolo">
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">autore</label>
+                  <input type="text" class="form-control" id="autore" placeholder="inserisci l'autore">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">genere</label>
+                    <input type="text" class="form-control" id="genere" placeholder="inserisci il genere">
+                  </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">anno di pubblicazione</label>
+                    <input type="number" class="form-control" id="anno_pubblicazione" aria-describedby="emailHelp" placeholder="inserisci l'anno di pubblicazione">
+                </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="aggiungi_libro()">conferma</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" onclick="genera_select()">
+    restituzione libro
+  </button>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form>
+                  <div class="form-group">
+                    <select  name="prestiti" id="select_prestiti_2" aria-label="lista libri in prestito">
+                    </select>
+                  </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="restituzione()">conferma</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <script>
+
+        class Libro{
+            constructor(titolo,autore,genere,annoPubblicazione,disponibile){
+                this.titolo=titolo;
+                this.autore=autore;
+                this.genere=genere;
+                this.annoPubblicazione=annoPubblicazione;
+                this.disponibile=disponibile
+            }
+
+            disponibilita(){
+                if(this.disponibile==true)
+                    return true;
+                else
+                    return false;
+            }
+        }
+
+        class Lettore{
+            constructor(nome,cognome,numTessera){
+                this.nome=nome;
+                this.cognome=cognome;
+                this.numTessera=numTessera;
+                this.prestiti=new Array();
+            }
+        
+            aggiungi_prestito(libro){
+                if(libro.disponibilita()==true)
+                    this.prestiti.push(libro);
+                else
+                    console.log("il libro non è disponibile per il prestito");
+            }
+
+            restituisci_libri(libro){
+                //non faccio controlli siccome la select sarà generata automamente con tutti i libri prestati
+                libro.disponibile=true;
+            }
+                            
+        
+        }
+
+        class Biblioteca{
+            constructor(){
+                this.inventario=new Array();
+                this.lettori=new Array();
+                this.prestiti=new Array();
+            }
+
+            aggiungiLibro(libro){
+                this.inventario.push(libro);
+            }
+
+            registraLettore(lettore){
+                this.lettori.push(lettore);
+            }
+
+            effettuaPrestito(libro,lettore){
+                this.prestiti.push({lettore,libro});
+            }
+
+            restituisciLibro(lettore,libro){
+                let restituzione;
+                for(let i=0;i<this.prestiti.length;i++){
+                    const prestito=this.prestiti[i];
+                    if(prestito.lettore === lettore && prestito.libro === libro){
+                       restituzione=this.prestiti.splice(i,1)[0];
+                       console.log(restituzione)
+                       break;
+
+                    }
+                }
+            console.log("prestito non trovato impossibile rimuovere");
+            }
+
+            listaLibriInPrestito(){
+                console.log("lista libri in prestito");
+                for(let i=0;i<this.prestiti.length;i++){
+                    const prestito=this.prestiti[i];
+                    console.log(prestito.lettore,prestito.libro);
+                }
+            }
+
+            trova_lettore(cognome){
+                for(let i=0;i<this.lettori.length;i++){
+                    if(cognome === this.lettori[i].cognome)
+                        return this.lettori[i];
+                }
+
+            }
+
+            trova_libro(titolo){
+                for(let i=0;i<this.inventario.length;i++){
+                    if(titolo === this.inventario[i].titolo)
+                        return this.inventario[i]; 
+                }
+            }
+        }
+
+
+        let biblio=new Biblioteca();
+        //12
+        let l1=new Libro("Guerra e Pace","Dostojesky","romanzo",1888,true);
+        let l2=new Libro("1984","Orwell","distopico",1948,true);
+        let l3=new Libro("Divina commedia","dante","classico",1300,true);
+        let l4=new Libro("Harry Potter","Rowling","fantasy",1989,true);
+        biblio.aggiungiLibro(l1);
+        biblio.aggiungiLibro(l2);
+        biblio.aggiungiLibro(l3);
+        biblio.aggiungiLibro(l4);
+        //13
+        let let1=new Lettore("Mattia","Gostivari",1);
+        let let2=new Lettore("Alessio","Lorusso",2);
+        let let3=new Lettore("Luca","Gualtieri",3);
+        let let4=new Lettore("Tizio","Caio",4);
+        biblio.registraLettore(let1);
+        biblio.registraLettore(let2);
+        biblio.registraLettore(let3);
+        biblio.registraLettore(let4);
+        //14
+        biblio.effettuaPrestito(l1,let1);
+        biblio.effettuaPrestito(l2,let2);
+        biblio.effettuaPrestito(l3,let3);
+        //15
+        biblio.restituisciLibro(let3,l3);
+        //16
+        biblio.listaLibriInPrestito();
+
+        //17
+        function lista_prestiti(){
+            var prestiti=document.getElementById("select_prestiti");
+            let lista=biblio.prestiti;
+            for(let i=0;i<lista.length;i++){
+                console.log(lista[i]);
+                let option=document.createElement("option");
+                option.innerHTML=lista[i].libro.titolo;
+                prestiti.appendChild(option);
+            }
+
+
+        }
+
+        //18
+        function aggiungi_libro(){
+            let titolo=document.getElementById("titolo").value;
+            let autore=document.getElementById("autore").value;
+            let genere=document.getElementById("genere").value;
+            let anno_pubblicazione=document.getElementById("anno_pubblicazione").value;
+            let l=new Libro(titolo,autore,genere,anno_pubblicazione,true)//ipotizziamo un libro appena aggiunto sia ovviamente disponibile
+            biblio.aggiungiLibro(l);
+
+        }
+
+        //19
+
+        function genera_select(){//mi sono accorto ora che la parte iniziale di questa funzione sarà uguale a quella della funzione lista_prestiti() se avrò tempo creero un metodo per evitare ripetizione di codice
+            var prestiti=document.getElementById("select_prestiti_2");
+            let lista=biblio.prestiti;
+            for(let i=0;i<lista.length;i++){
+                console.log(lista[i]);
+                let option=document.createElement("option");
+                option.innerHTML=lista[i].libro.titolo;
+                prestiti.appendChild(option); 
+
+        }
+    }
+
+        function restituzione(){
+            //non sono riuscito a pulire le select ogni volta che le cliccavo
+            let lista=biblio.prestiti;
+            let restituito=document.getElementById("select_prestiti_2").value;
+            console.log(restituito);
+                for(let i=0;i<biblio.prestiti.length;i++){
+                    const prestito=biblio.prestiti[i];
+                    if(prestito.libro.titolo==restituito){
+                        biblio.restituisciLibro(prestito.lettore,prestito.libro)
+
+                    }
+                }
+
+        }
+
+    
+    </script>
+ 
+</script>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

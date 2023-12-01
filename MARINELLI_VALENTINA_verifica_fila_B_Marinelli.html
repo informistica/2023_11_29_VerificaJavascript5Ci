@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifica Fila B Marinelli</title>
+</head>
+<body>
+    <h3>Agenzia Noleggio Auto Marinelli</h3>
+    <p id="lista"> Lista Veicoli Noleggiati: </p>
+
+    <script>
+        class Veicolo{
+            constructor(tipo, marca, modello, anno, prezzoNoleggioOrario) {
+                    this.tipo = tipo;
+                    this.marca = marca;
+                    this.modello = modello;
+                    this.anno = anno;
+                    this.prezzoNoleggioOrario = prezzoNoleggioOrario;
+                }
+
+                calcolaCostoNoleggio(ore){
+                    return ore*this.prezzoNoleggioOrario;
+                }
+        }
+
+        class Cliente{
+            constructor(nome, cognome, numeroPatente) {
+                    this.nome = nome;
+                    this.cognome = cognome;
+                    this.numeroPatente = numeroPatente;
+                    this.noleggiEffettuati = [];
+                }
+
+                noleggiaVeicolo(veicolo){
+                    this.noleggiEffettuati.push(veicolo);
+                }
+
+                restituisciVeicolo(veicolo){
+                    this.noleggiEffettuati.remove(veicolo);
+                }
+        }
+
+        class CompagniaNoleggio{
+            constructor() {
+                    this.inventario=[];
+                    this.clienti=[];
+                    this.noleggi=[];
+                }
+
+                aggiungiVeicolo(veicolo){
+                    this.inventario.push(veicolo);
+                }
+
+                registraCliente(cliente){
+                    this.clienti.push(cliente);
+                }
+
+                effettuaNoleggio(cliente, veicolo){
+                    for(let i=0;i<this.clienti.length;i++){
+                        if(cliente.cognome==this.clienti[i].cognome){
+                            this.noleggi.push({cliente,veicolo});
+                        }
+                    }
+                }
+
+                restituisceVeicolo(cliente,veicolo){
+                    let veicoloRimosso;
+                    for (let i = 0; i < this.noleggi.length; i++) {
+                        const c = this.clienti[i];
+                        if (c.cognome === cliente.cognome) {
+                            veicoloRimosso = this.noleggi.splice(i, 1)[0];
+                            break;
+                        }
+                    }
+                    if (veicoloRimosso) {
+                        console.log(`Veicolo rimosso --> Cliente : ${veicoloRimosso.cliente.nome} ${veicoloRimosso.cliente.cognome}, Tipo: ${veicoloRimosso.veicolo.tipo}, Modello: ${veicoloRimosso.veicolo.modello} , Marca: ${veicoloRimosso.veicolo.marca}`);
+                    } else {
+                        console.log("Veicolo non trovato. Impossibile rimuovere.");
+                    }
+                }
+
+                elencoVeicoliNoleggiati(cliente){
+                    for (let i = 0; i < this.clienti.length; i++) {
+                        const c = this.clienti[i];
+                        if(c.cognome === cliente.cognome){
+                            console.log(cliente.noleggiEffettuati)
+                        }
+                    }
+                }
+        }
+
+        let compagnia = new CompagniaNoleggio();
+
+        var veicolo1 = new Veicolo("suv","Ferrari","F12",2019,500);
+        var veicolo2 = new Veicolo("sportiva","Opel","A99",2020,100);
+        var veicolo3 = new Veicolo("mini","Fiat","500",2015,130);
+        var veicolo4 = new Veicolo("4x4","Panda","L83",1990,50);
+        var veicolo5 = new Veicolo("quadriciclo","Lamborghini","RS1",2023,550);
+
+        var cliente1 = new Cliente("Sara","Oberto","CA1234",4);
+        var cliente2 = new Cliente("Valentina","Marinelli","SS6743",7);
+        var cliente3 = new Cliente("Tommaso","Fagnani","GE8902",9);
+        cliente1.noleggiaVeicolo(veicolo1);
+        cliente2.noleggiaVeicolo(veicolo2);
+        cliente3.noleggiaVeicolo(veicolo3);
+
+        compagnia.aggiungiVeicolo(veicolo1);
+        compagnia.aggiungiVeicolo(veicolo2);
+        compagnia.aggiungiVeicolo(veicolo3);
+        compagnia.aggiungiVeicolo(veicolo4);
+        compagnia.aggiungiVeicolo(veicolo5);
+
+        compagnia.registraCliente(cliente1);
+        compagnia.registraCliente(cliente2);
+        compagnia.registraCliente(cliente3);
+
+        compagnia.effettuaNoleggio(cliente1,veicolo1);
+        compagnia.effettuaNoleggio(cliente2,veicolo2);
+        compagnia.effettuaNoleggio(cliente3,veicolo3);
+
+        console.log("Veicolo restituito e rimosso dai noleggiati: ")
+        compagnia.restituisceVeicolo(cliente2,veicolo2);
+
+        console.log("Veicoli noleggiati da un cliente: ")
+        compagnia.elencoVeicoliNoleggiati(cliente3);
+
+        console.log("Lista dei veicoli noleggiati: ")
+        console.log(compagnia.noleggi)
+
+        let lista = compagnia.noleggi;
+        document.getElementById("lista").innerHTML+="<li>"+lista.veicolo+"</li>";
+
+        
+
+    </script>
+</body>
+</html>

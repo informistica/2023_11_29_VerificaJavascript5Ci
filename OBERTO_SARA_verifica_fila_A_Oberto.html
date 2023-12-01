@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Verifica Oberto Fila A </title>
+</head>
+<h1> Gestione Biblioteca Oberto </h1>
+
+<p id="listaLibriInPrestito"> Lista libri in prestito: </p>
+
+<body>
+    
+    <script>
+
+        class Libro{ 
+
+            constructor(titolo, autore, genere, anno_Pubblicazione, disponibile){
+                this.titolo = titolo;
+                this.autore = autore;
+                this.genere = genere;
+                this.anno_Pubblicazione = anno_Pubblicazione;
+                this.disponibile = true;
+            }
+
+            disponibile(){
+                return this.disponibile;
+            }
+        }
+
+        class Lettore{ 
+
+            constructor(nome, cognome, numeroTessera, prestiti){
+                this.nome = nome;
+                this.cognome = cognome;
+                this.numeroTessera = numeroTessera;
+                this.prestiti = prestiti;
+                this.lista = [];
+            }
+
+            aggiungiPrestito(libro){
+                //Aggiunge un libro alla lista dei prestiti del lettore
+                this.lista.push(libro)
+                this.disponibile = false;
+                this.prestiti ++;
+            }
+
+            restituisciLibro(libro){
+                //Restituisce un libro precedentemente preso in prestito
+                let libroRestituito;
+                for(let i = 0; i < this.lista.length; i++){
+                    const l = lista[i];
+                    if(l.libro === libro) {
+                        libroRestituito = lista.splice(i, 1)[0];
+                    }
+                }
+                this.disponibile = true;
+                this.prestiti -=0;
+            }
+        }
+
+        class Biblioteca{
+
+            constructor(){
+                this.inventario = []; //una lista di libri disponibili
+                this.lettori = []; //una lista di lettori registrati
+                this.prestiti = []; //una lista di libri attualmente in prestito
+            }
+
+            aggiungiLibro(libro){
+                //Aggiunge un libro all'inventario della biblioteca
+                this.inventario.push(libro);
+            }
+
+            registraLettore(lettore){
+                //Registra un lettore presso la biblioteca
+                this.lettori.push(lettore);
+            }
+
+            effettuaPrestito(lettore, libro){
+                //Registra il prestito di un libro da parte di un lettore
+                let libroPrestato;
+                for(let i = 0; i < this.inventario.length; i++){
+                    const inventari = this.inventario[i];
+                    if(inventari.libro === libro && inventari.lettore === lettore) {
+                        libroPrestato = inventario.splice(i, 1)[0];
+                    }
+                }
+
+                this.prestiti.push({lettore,libro});
+                lettore.prestiti ++;
+
+            }
+
+            restituisciLibro(lettore, libro){
+                //Registra la restituzione di un libro da parte di un lettore
+                let libroRestituito;
+                for(let i = 0; i < this.prestiti.length; i++){
+                    const prestito = this.prestiti[i];
+                    if(prestito.libro === libro && prestito.lettore === lettore) {
+                        libroRestituito = this.prestiti.splice(i, 1)[0];
+                    }
+                console.log(libroRestituito)
+                break;
+                }
+                
+                if (libroRestituito) {
+                    console.log(`Libro restituito: Lettore: ${libroRestituito.lettore.nome} ${libroRestituito.lettore.cognome}, Libro: ${libroRestituito.libro.titolo} ${libroRestituito.libro.autore}`);
+                } 
+                else {
+                    console.log("Libro non trovato. Impossibile rimuovere.");
+                }
+                this.inventario.push({libro, lettore});
+                lettore.prestiti -=0;
+
+
+            }
+
+            listaLibriInPrestito(){
+                //Restituisce la lista dei libri attualmente in prestito
+                console.log("Libri in prestito");
+                for (let i = 0; i < this.prestiti.length; i++) {
+                    const p = this.prestiti[i];
+                    console.log(p.lettore , p.libro);
+
+                }
+            }
+
+        }
+
+        //Creazione di un libro 
+        const libro1 = new Libro(1984, "Orwell", "distopico", 1948 , true);
+        const libro2 = new Libro("Harry Potter", "J.K. Rowling", "fantasy", 2000 , true);
+        const libro3 = new Libro("Harry Potter e la pietra filosofale", "J.K. Rowling", "fantasy", 2006 , true);
+
+
+        biblioteca = new Biblioteca();
+
+        //Agginta del libro all'inventario
+        biblioteca.aggiungiLibro(libro1);
+
+        //Creazione lettore
+        const lettore1 = new Lettore("Sara", "Oberto", 1234, 0);
+        const lettore2 = new Lettore("Valentina", "Marinelli", 2345, 0);
+
+        //Registrazione del lettore
+        biblioteca.registraLettore(lettore1);
+        biblioteca.registraLettore(lettore2);
+
+        //Registrare prestiti
+        biblioteca.effettuaPrestito(lettore1, libro1);
+        biblioteca.effettuaPrestito(lettore2, libro2);
+        biblioteca.effettuaPrestito(lettore1, libro3);
+
+        //Restituzione libro
+        biblioteca.restituisciLibro(lettore1, libro1);
+
+        //Libri in prestito
+        biblioteca.listaLibriInPrestito();
+
+        //Libri in prestito
+        for(let i = 0; i < biblioteca.prestiti.length; i++){
+            document.getElementById("listaLibriInPrestito").innerHTML = " Libri attualmente in prestito: " + biblioteca.prestiti[i].libro.titolo;
+        }
+
+        
+    </script>
+</body>
+</html>

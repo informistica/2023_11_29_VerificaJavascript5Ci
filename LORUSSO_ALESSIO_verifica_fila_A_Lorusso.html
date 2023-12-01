@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifica</title>
+</head>
+<body>
+    <h1> Verifica Lorusso Fila A</h1>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        Aggiungi libro
+      </button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">aggiungi libro</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+    
+                <p>titolo:</p>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="nome" placeholder="inserisci il nome">
+                </div>
+    
+                <p>autore:</p>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="cognome" placeholder="inserisci cognome">
+                </div>
+    
+                <p>genere:</p>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="periodoIscrizione" placeholder="inserisci il periodo d'iscrizione">
+                </div>
+    
+                <p>anno Pubblicazione:</p>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="quotaMensile" placeholder="inserisci la quota mensile">
+                </div>
+    
+
+                
+               
+    
+            </div>
+    
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">chiudi</button>
+              <button type="button" class="btn btn-primary" onclick="aggiungiLibro()">aggiungi</button>
+            </div>
+    
+          </div>
+        </div>
+      </div>
+    
+    
+      <div id="tab">
+        <table class="table">
+            <thead id="thead" class="table">
+                <tr>
+                    <td>titolo</td>
+                    <td>autore</td>
+                    <td>genere</td>    
+                    <td>anno Pubblicazione</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tbody id="tbody"> </tbody> 
+            </tbody>
+                   
+        </table>
+      </div>
+
+
+      <button type="button" class="btn btn-primary" onclick="lettoriIscitti()">lettori iscitti</button><br>  
+        <div id="lettori">
+        <p id="iscrittiPilates"></p>
+  
+</div>
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <script>
+
+class Libro{
+            constructor(titolo,autore,genere,annoPubblicazione,disponibile,libri){
+                this.titolo=titolo;
+                this.autore=autore;
+                this.genere=genere;
+                this.annoPubblicazione=annoPubblicazione;
+                this.disponibile=true;
+                this.libri=new Array();
+            }
+
+            disponibile(titolo){
+                for(let i = 0; i<libri.lenght; i++){
+                    if(libri[i].titolo==this.titolo)
+                        return "libro disponibile";
+                }
+                
+                return "libro non disponibile";
+            }
+        }
+class Lettore {
+    constructor(nome,cognome,numeroTessera,prestiti){
+                this.nome=nome;
+                this.cognome=cognome;
+                this.numeroTessera=numeroTessera;
+                this.prestiti=new Array();
+            }
+
+        aggiungiPrestito(libro){
+            this.prestiti.push(libro);
+            for(let i=0;i<prestiti.length;i++){
+                if(libro.titolo== lettore.prestiti[i].titolo)
+                    libro.disponibile=false;
+            }
+
+        }
+
+        restituisciLibro(libro){
+            for(let i=0;i<prestiti.length;i++){
+                if(libro.titolo== this.lettore.prestiti[i].titolo)
+                    libro.disponibile=true;
+            }
+        
+        }
+}
+class Biblioteca{
+    constructor(inventario,lettori, prestiti){
+        this.inventario=new Array();
+        this.lettori=new Array();
+        this.prestitiB=new Array();
+    }
+
+    aggiungiLibro(libro){
+        this.inventario.push(libro);
+    }
+
+    registraLettore(lettore){
+        this.lettori.push(lettore);
+    }
+
+    effettuaPrestito(lettore, libro){
+        for(let i=0;i<prestiti.length;i++)
+            if( lettore.nome == libro.prestiti[i].nome)
+                libro.prestiti[i].disponibile=false;
+    }
+
+    restituisciLibro(lettore,libro){
+            for(let i=0;i<prestiti.length;i++){
+                if(libro.titolo== lettore.prestiti[i].titolo)
+                    libro.disponibile=true;
+            }
+        }
+    
+    listaLibriInPrestito(){
+        for(let i=0;i<prestiti.length;i++){
+            if(biblioteca.prestiti[i].disponibile)
+                this.prestitiB.push(biblioteca.prestiti[i]);
+        }
+        return prestitiB;
+    } 
+    
+}
+
+
+function aggiungiLibro(){
+    let titolo=document.getElementById("titolo").value;
+    let autore=document.getElementById("autore").value;
+    let genere=document.getElementById("genere").value;
+    let annoPubblicazione=parseInt(document.getElementById("annoPubblicazione").value);
+    let disponibile=document.getElementById("disponibile").value;
+
+    for(let libri of biblioteca.inventario){
+        if(libri.nome==biblioteca.inventario[i].nome)
+            biblioteca.aggiungiLibro(libro);
+        }
+
+    let tbody=document.getElementById("tbody");
+            
+            const tr=document.createElement("tr");
+            let td=document.createElement("td");
+
+
+            td.innerText=`${titolo}`;
+            tr.appendChild(td);
+            td=document.createElement("td");
+
+            td.innerText=`${autore}`;
+            tr.appendChild(td);
+            td=document.createElement("td");
+
+            td.innerText=`${genere}`;
+            tr.appendChild(td);
+            td=document.createElement("td");
+            
+            td.innerText=`${annoPubblicazione}`;
+            tr.appendChild(td);
+            td=document.createElement("td");
+
+            td.innerText=`${disponibile}`;
+            tr.appendChild(td);
+            td=document.createElement("td");
+
+
+            tr.appendChild(td);
+            tbody.appendChild(tr);
+
+
+            document.getElementById("titolo").value="";
+            document.getElementById("autore").value="";
+            document.getElementById("genere").value="";
+            document.getElementById("annoPubblicazione").value="";
+    }
+
+    function registraLettore(){
+    let nome=document.getElementById("nome").value;
+    let cognome=document.getElementById("cognome").value;
+    let numeroTessera=parseInt(document.getElementById("numeroTessera").value);
+
+    for(let lettore of biblioteca.lettori){
+        if(lettore.nome==biblioteca.lettori[i].nome)
+            biblioteca.registraLettore(lettore);
+    }
+
+    document.getElementById("nome").value="";
+    document.getElementById("cognome").value="";
+    document.getElementById("numeroTessera").value="";
+            
+    }
+
+
+    function registraPrestiti(){
+
+    }
+
+        let biblioteca= new Biblioteca();
+        let libro1 = new Libro('titolo1','autore1','genere1',1990,true);
+        let libro2 = new Libro('titolo2','autore2','genere2', 2000,true);
+        let libro3 = new Libro('titolo3','autore3','genere3', 2010, true);
+        
+        biblioteca.aggiungiLibro(libro1);
+        biblioteca.aggiungiLibro(libro2);
+        biblioteca.aggiungiLibro(libro3);
+
+
+        let lettore1= new Lettore("nome1","cognome1","numeroTessera1");  
+        let lettore2= new Lettore("nome2","cognome2","numeroTessera2"); 
+        let lettore3= new Lettore("nome3","cognome3","numeroTessera3"); 
+
+        biblioteca.registraLettore(lettore1);
+        biblioteca.registraLettore(lettore2);
+        biblioteca.registraLettore(lettore3);
+
+        let libri=[libro1,libro2,libro3];
+        /*for(let libro of libri) {
+          const p = document.createElement("p");
+          p.id="tot"+libro.nome; 
+          p.innerHTML="Totale "+libro.nome;
+          document.getElementById("totali").appendChild(p);
+        }   */
+
+        
+        //Function per debug
+        function inizializzaLibro() {
+            document.getElementById("titolo").value="titolo1";
+            document.getElementById("autore").value="autore1";
+            document.getElementById("genere").value="genere1";
+            document.getElementById("annoPubblicazione").value=1990;
+            document.getElementById("disponibile").value="true";
+
+            aggiungiLibro();
+            document.getElementById("titolo").value="titolo1";
+            document.getElementById("autore").value="autore1";
+            document.getElementById("genere").value="genere1";
+            document.getElementById("annoPubblicazione").value=1990;
+            document.getElementById("disponibile").value="true";
+            aggiungiLibro();
+        }
+
+
+    </script>   
+</body>
+</html>

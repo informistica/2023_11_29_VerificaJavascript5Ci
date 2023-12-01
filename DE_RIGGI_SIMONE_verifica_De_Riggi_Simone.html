@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="it">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    
+    <title>Verifica fila A</title>
+</head>
+<body>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        aggiungi libro
+    </button>
+    <div class="modal face" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">aggiungi libro</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                 <form>
+                    <div class="form-group">
+                        <label for="nome" class="col-form-label">titolo</label>
+                        <input type="text" class="form-control" id="nome" aria-describedby="">
+                    </div>
+                    <div class="form-group">
+                        <label for="cognome" class="col-form-label">autore</label>
+                        <input type="text" class="form-control" id="cognome">
+                    </div>
+                    <div class="form-group">
+                        <label for="iscrizione" class="col-form-label">genere</label>
+                        <input type="text" class="form-control" id="iscrizione">
+                    </div>
+                    <div class="form-group">
+                        <label for="quota" class="col-form-label">anno di pubblicazione</label>
+                        <input type="text" class="form-control" id="quota">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">chiudi</button>
+                        <button type="button" class="btn btn-secondary" onclick="aggiungi()">aggiungi</button>
+                      </div>
+                </div>
+            </div>
+        </form>
+        </div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">titolo</th>
+                <th scope="col">autore</th>
+                <th scope="col">genere</th>
+                <th scope="col">anno di pubblicazione</th>
+            </tr>
+        </thead>
+        <tbody id="ta">
+        </tbody>
+    </table>
+    
+</body>
+<script>
+    class libro{
+            constructor (titolo,autore,genere,annoPubblicazione){ 
+                this.titolo=titolo;
+                this.autore=autore;
+                this.genere=genere;
+                this.annoPubblicazione=annoPubblicazione;
+                this.disponibile=true
+            }
+
+            disponibile(){
+                if(this.libro.disponibile==true){
+                    console.log("libro disponibile")
+                }
+                else{
+                    console.log("libro non disponibile")
+                }
+                return this.libro.disponibile
+                }
+            }
+    class lettore{
+            constructor (nome,cognome,numeroTessera){ 
+                this.nome=nome;
+                this.cognome=cognome;
+                this.numeroTessera=numeroTessera;
+                this.prestitiLettore=[];
+            }
+
+            aggiungiPrestito(libro){
+                prestitiLettore.push(libro);
+                }
+
+            restituisciLibroLettore(libro){
+                        prestitiLettore.splice(libro);
+                }
+                }
+    class biblioteca{
+            constructor(){ 
+                this.inventario=[];
+                this.lettori=[];
+                this.prestiti=[];
+            }
+
+            aggiungiLibro(libro){
+                this.inventario.push(libro);
+                }
+
+            registraLettore(lettore){
+                this.lettori.push(lettore);
+                }
+
+            effettuaPrestito(lettore,libro){
+                let cont=0;
+                for(let i=0;i<this.inventario.length;i++){
+                    if(this.inventario[i].titolo==libro.titolo){
+                        cont+=1
+                        lettore.aggiungiPrestito(libro);
+                        prestiti.push(libro);
+                        libro.disponibile==false;
+                }
+            }
+                if(cont!=1){
+                    console.log("libro non disponibile per il prestito")
+                }
+                }
+
+            restituisciLibro(lettore,libro){
+                let cont=0;
+                for(let i=0;i<this.prestiti.length;i++){
+                    if(this.prestiti[i].titolo==libro.titolo){
+                        cont+=1
+                        lettore.restituisciLibroLettore(libro);
+                        prestiti.splice(i,1);
+                        libro.disponibile==true
+                }
+            }
+                if(cont!=1){
+                    console.log("libro non preso in prestito")
+                }
+                }
+
+            listaLibriInPrestito(){
+                console.log(this.prestiti.length)
+                for(libroi in this.prestiti){
+                    console.log(libroi.titolo)
+                }
+            }
+        }
+            let biblioteca1=new biblioteca();
+            let sl='';
+            let titolo, autore, genere, annoPubblicazione, l;
+            let libro1=new libro("il sistema periodico","Levi","biografia","1960");
+            let libro2=new libro("1984","George","romanzo","1949");
+            let libro3=new libro("Divina Commedia ","Alighieri","libro in poesia","1300");
+            let libro4=new libro("Io bambino soldato ","Giannini","romanzo di formazione","2010");
+            let libro5=new libro("Il barone rampante ","Svevo","romanzo","1940");
+
+            biblioteca1.aggiungiLibro(libro1);
+            biblioteca1.aggiungiLibro(libro2);
+            biblioteca1.aggiungiLibro(libro3);
+            biblioteca1.aggiungiLibro(libro4);
+            biblioteca1.aggiungiLibro(libro5);
+
+            let lettore1=new libro("Mario","Rossi","1234");
+            let lettore2=new libro("Luigi","Verdi","1534");
+            let lettore3=new libro("Giovanni","Salvati","1934");
+
+            biblioteca1.registraLettore(lettore1);
+            biblioteca1.registraLettore(lettore2);
+            biblioteca1.registraLettore(lettore3);
+
+            biblioteca1.effettuaPrestito(lettore1,libro4);
+            biblioteca1.effettuaPrestito(lettore2,libro5);
+            biblioteca1.effettuaPrestito(lettore2,libro1);
+
+            biblioteca1.restituisciLibro(lettore1,libro4);
+            biblioteca1.restituisciLibro(lettore2,libro5);
+
+            biblioteca1.listaLibriInPrestito();
+
+            for(let i=0;i<biblioteca1.prestiti.length;i++){
+                l=biblioteca1.prestiti[i]
+            sl+=`<tr>`;
+            sl+=`<td>${l.titolo}</td>`;
+            sl+=`<td>${l.autore}</td>`;
+            sl+=`<td>${l.genere}</td>`;
+            sl+=`<td>${l.annoPubblicazione}</td>`;
+            sl+=`</tr>`;
+            document.getElementById("ta").innerHTML+=sl;
+            }
+
+            function aggiungi(){
+                const titolo= document.getElementById("titolo").value
+                const autore= document.getElementById("autore").value
+                const genere= document.getElementById("genere").value
+                const annoPubblicazione= document.getElementById("annoPubblicazione").value
+        if(titolo=="" || autore=="" || genere=="" || annoPubblicazione=="" || isNaN(titolo)==false || isNaN(autore)==false || isNaN(genere)==true || isNaN(annoPubblicazione)==true)
+            alert("inserire correttamente i dati")
+        else{
+            l=new libro(titolo,autore,genere,annoPubblicazione);
+            biblioteca1.aggiungiLibro(l);
+            }
+           
+            }
+        
+</script>
+</html>

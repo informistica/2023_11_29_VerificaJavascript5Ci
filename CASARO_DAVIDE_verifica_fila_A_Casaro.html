@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>verifica Casaro</title>
+</head>
+<body>
+
+    <form>
+        <div class="form-group">
+        <label for="tit">titolo</label>
+        <input type="tit" class="form-control" id="titolo" aria-describedby="tit" placeholder="inserire titolo">
+        </div>
+        <div class="form-group">
+        <label for="aut">autore</label>
+        <input type="aut" class="form-control" id="autore" placeholder="inserire autore">
+        </div>
+        <div class="form-group">
+            <label for="gen">genere </label>
+            <input type="gen" class="form-control" id="genere" placeholder="inserire genere">
+        </div>
+        <div class="form-group">
+            <label for="anno di pubblicazione">anno di pubblicazione </label>
+            <input type="an" class="form-control" id="anno" placeholder="inserire anno di pubblicazione">
+        </div>
+        <div class="form-group">
+            <label for="disp">disponibilità</label>
+            <input type="disp" class="form-control" id="disponibile" placeholder="true or false">
+        </div>
+    </form>
+
+    <button type="button" onclick="aggiungi()">Add book</button>
+
+    <table border="1" class="table table-striped">
+        <tbody id="tbody">
+            <tr>
+                <th>titolo</th>
+                <th>autore</th>
+                <th>genere</th>
+                <th>annoPubblicazione</th>
+                <th>disponibile</th>
+            </tr>
+        </tbody>
+    </table>
+
+    <button type="button" onclick="tabella()">Add</button>
+
+    <script>
+        //1
+        class Libro{
+            constructor(titolo,autore,genere,annoPubblicazione,disponibile){
+                this.titolo=titolo;
+                this.autore=autore;
+                this.genere=genere;
+                this.annoPubblicazione=annoPubblicazione;
+                this.disponibile=disponibile;
+            }
+            //2
+            disp(){
+                if(this.disponibile)
+                    return true;
+                else
+                    return false;
+            }
+        }
+        //3
+        class Lettore{
+            constructor(nome,cognome,numeroTessera){
+                this.nome=nome;
+                this.cognome=cognome;
+                this.numeroTessera=numeroTessera;
+                this.prestiti=[];
+            }
+            //4
+            aggiungiPrestito(libro){
+                if(libro.disp()){
+                    this.prestiti.push(libro);
+                    libro.disponibile=false;
+                }
+                else
+                    return "libro non disponibile";
+            }
+            //5
+            restituisciLibro(libro){
+                let rimosso;
+                for(let i=0;i<this.prestiti.length;i++){
+                    if(this.prestiti[i]==libro)
+                        rimosso=this.prestiti.splice(i,1)[0];
+                        libro.disponibile=true;
+                        console.log(rimosso);
+                        break;
+                }        
+            }
+        }
+        //6
+        class Biblioteca{
+            constructor(){
+                this.inventario=[];
+                this.lettori=[];
+                this.prestiti=[];
+            }
+            //7
+            aggiungiLibro(libro){
+                this.inventario.push(libro);
+                libro.disponibile=true;
+            }
+            //8
+            registraLettore(lettore){
+                this.lettori.push(lettore);
+            }
+            //9
+            effettuaPrestito(lettore,libro){     
+                lettore.aggiungiPrestito(libro);
+                this.prestiti.push(libro);
+            }
+            //10
+            restituisciLibro(lettore,libro){
+                lettore.restituisciLibro(libro);
+            }
+            //11
+            listaLibriInPrestito(){
+                for(let i=0;i<this.prestiti.length;i++){
+                    console.log(this.prestiti[i].titolo); 
+                    console.log(this.prestiti[i].autore);
+                    console.log(this.prestiti[i].genere);
+                    console.log(this.prestiti[i].annoPubblicazione);
+                    console.log(this.prestiti[i].disponibile);     
+                }  
+            }
+            lunghezza(){
+                return this.prestiti.length;
+            }
+        }
+
+        //17
+        function tabella(){
+            for(let i=0;i<biblioteca.lunghezza();i++){
+                let titolo=biblioteca.prestiti[i].titolo; 
+                let autore=biblioteca.prestiti[i].autore;
+                let genere=biblioteca.prestiti[i].genere;
+                let annoPubblicazione=biblioteca.prestiti[i].annoPubblicazione;
+                let disponibile=biblioteca.prestiti[i].disponibile; 
+                if(disponibile=="true") 
+                    disponibile=true;
+                else
+                    disponibile=false;  
+                stringa=`<tr><td>${titolo}</td>`;
+                stringa+=`<td>${autore}</td>`;
+                stringa+=`<td>${genere}</td>`;
+                stringa+=`<td>${annoPubblicazione}</td>`;
+                stringa+=`<td>${disponibile}€</td></tr>`;
+                tbody.innerHTML+=stringa;  
+            }
+        }
+
+        //18
+        function aggiungi(){
+            let titolo=document.getElementById("titolo").value;
+            let autore=document.getElementById("autore").value;
+            let genere=document.getElementById("genere").value;
+            let annoPubblicazione=document.getElementById("anno").value;
+            let disponibile=document.getElementById("disponibile").value;
+            if(disponibile=="true") 
+                    disponibile=true;
+                else
+                    disponibile=false;
+
+            let libroNuovo=new Libro(titolo,autore,genere,annoPubblicazione,disponibile);
+
+            biblioteca.aggiungiLibro(libroNuovo);
+            console.log("libro aggiunto");
+
+            let lettoreEsempio=new Lettore("esempio","esempio",3);
+            biblioteca.registraLettore(lettoreEsempio);
+
+            biblioteca.effettuaPrestito(lettoreEsempio,libroNuovo);
+            console.log("prestito eseguito");
+        }
+
+        var biblioteca=new Biblioteca();
+
+        //12
+        var libro1=new Libro("1984","boh","distopico",1948,true);
+        var libro2=new Libro("le luci di settembre","boh","triller",2000,true);
+        
+        biblioteca.aggiungiLibro(libro1);
+        biblioteca.aggiungiLibro(libro2);
+
+        //13
+        var lettore1=new Lettore("Davide","Casaro",1);
+        var lettore2=new Lettore("Alessio","Colombo",2)
+
+        biblioteca.registraLettore(lettore1);
+        biblioteca.registraLettore(lettore2);
+
+        //14
+        biblioteca.effettuaPrestito(lettore1,libro1);
+        biblioteca.effettuaPrestito(lettore2,libro2);
+
+        //15
+        biblioteca.restituisciLibro(lettore1,libro1);
+        biblioteca.restituisciLibro(lettore2,libro2);
+
+        //16
+        biblioteca.listaLibriInPrestito();
+        
+    </script>   
+</body>
+</html>

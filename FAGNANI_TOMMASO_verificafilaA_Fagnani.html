@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> </title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+<h1>Verifica Fila A Fagnani</h1>
+<div class="table" id="tab"></div> 
+<div class="table" id="tab2"></div> 
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Aggiungi libro all'inventario</button>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">AGGIUNGI LIBRO ALL'INVENTARIO</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form>
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">TITOLO</label>
+                    <br>
+                    <input type="email" class="form-control" id="titolo" placeholder="TITOLO">
+                </div>
+
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">AUTORE</label>
+                    <br>
+                    <input type="email" class="form-control" id="autore" placeholder="AUTORE">
+                </div>
+
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">GENERE</label>
+                    <br>
+                    <input type="email" class="form-control" id="genere" placeholder="GENERE">
+                </div>
+
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">ANNO DI PUBBLICAZIONE</label>
+                    <br>
+                    <input type="email" class="form-control" id="annoPubblicazione" placeholder="ANNO DI PUBBLICAZIONE">
+                </div>
+              </form>
+              <br>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
+          <button type="button" class="btn btn-primary" onclick="aggiungiLibroInventario()"> Aggiungi Libro! </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal2">RESTITUISCI LIBRO</button>
+
+<div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">RESTITUZIONE LIBRO</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form>
+                <div class="form-group">
+                    <label for="exampleFormControlSelect1">Titolo da restituire</label>
+                    <br>
+                    <select class="form-control" id="rest">
+                    </select>
+                  </div>
+
+              </form>
+              <br>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
+          <button type="button" class="btn btn-primary" onclick="restituisci()"> restituire </button>
+        </div>
+      </div>
+    </div>
+  </div>
+<script>
+
+class Libro {
+        constructor(titolo, autore, genere, annoPubblicazione){
+        this.titolo = titolo;
+        this.autore = autore;
+        this.genere = genere;
+        this.annoPubblicazione = annoPubblicazione;
+        this.disponibile = true;
+    }
+
+    disponibilità(disp){
+        this.disponibile==disp;
+    } 
+}
+
+class Lettore {
+        constructor(nome , cognome , numeroTessera){
+        this.nome = nome;
+        this.cognome = cognome;
+        this.numeroTessera = numeroTessera;
+        this.prestiti = [];
+    }
+
+    aggiungiPrestito(libro){
+        this.prestiti.push(libro)
+    }
+
+    restituisciLibro(libro){
+        for(var i=0; i<this.prestiti.length; i++ ){
+            if(this.prestiti[i].titolo == libro.titolo)
+                return this.prestiti[i];
+        }
+        
+    }
+}
+
+
+class Biblioteca {
+    constructor(){
+        this.inventario = [];
+        this.lettori = [];
+        this.prestiti = [];
+    }
+
+    aggiungiLibro(libro){
+        this.inventario.push(libro)
+    }
+
+    registraLettore(lettore){
+        this.lettori.push(lettore)
+    }
+
+    effettuaPrestito(lettore, libro){
+        this.prestiti.push({lettore, libro});
+        for(var j=0; j<this.prestiti.length; j++ ){
+            if(this.prestiti[j].libro.titolo == libro.titolo){
+                this.prestiti[j].libro.disponibile = false;
+            }
+                    
+            
+        }
+        
+
+    }
+
+    restituisciLibro(lettore, libro){
+    let libroRimosso;
+    for (var i = 0; i < this.prestiti.length; i++) {
+        const prestito = this.prestiti[i];
+        this.prestiti[i].libro.titolo == libro.titolo
+        if (prestito.lettore === lettore && prestito.libro === libro) {
+            libroRimosso = this.prestiti.splice(i, 1)[0];
+            prestito.libro.disponibile = true;
+            break;
+        }
+        
+        
+    }
+    
+    }
+    
+    
+    listaLibriInPrestito(){
+        return this.prestiti;
+    }
+
+    
+
+}
+
+    biblioteca = new Biblioteca();
+
+    //12.Aggiungere libri all'inventario
+    libro1 = new Libro("1984", "George Orwell", "Romanzo Distopico", 1948);
+    libro2 = new Libro("La Fattoria degli Animali", "George Orwell", "Romanzo", 1953)
+    libro3 = new Libro("Il rosso e il nero", "Stendhal", "Romanzo ", 1936)
+
+    biblioteca.aggiungiLibro(libro1);
+    biblioteca.aggiungiLibro(libro2);
+    biblioteca.aggiungiLibro(libro3);
+
+    //13.Registrare lettori
+    lettore1 = new Lettore("Tommaso", "Fagnani", 29);
+    lettore2 = new Lettore("Marco", "Balsano", 11);
+    lettore3 = new Lettore("Thomas", "Critelli", 23);
+    
+    biblioteca.registraLettore(lettore1);
+    biblioteca.registraLettore(lettore2);
+    biblioteca.registraLettore(lettore3);
+
+    //14.Registrare prestiti
+    biblioteca.effettuaPrestito(lettore1,libro1);
+    biblioteca.effettuaPrestito(lettore2,libro2);
+    biblioteca.effettuaPrestito(lettore3,libro3);
+
+    //15.Restituzioni di libri
+    biblioteca.restituisciLibro(lettore3,libro3);
+    
+    //16.Elencare i libri attualmente in prestito
+    
+    console.log(biblioteca.listaLibriInPrestito());
+
+
+    //INTERFACCIA
+    //17.Elencare i libri attualmente in prestito
+
+    function mostraLibriInPrestito() {
+        var tabella=document.createElement("table");
+        var thead=document.createElement("thead");
+        var tr=document.createElement("tr");
+        var td=document.createElement("td");
+        td.append("LIBRI IN PRESTITO");
+        thead.append(td)
+        tabella.append(thead);
+
+       
+        
+        for(var j=0; j<biblioteca.prestiti.length; j++ ){
+            var tr=document.createElement("tr");
+            var td=document.createElement("td");
+            var td2=document.createElement("td");
+            var td3=document.createElement("td");
+            
+            td.append(biblioteca.prestiti[j].libro.titolo)
+            td2.append(biblioteca.prestiti[j].lettore.nome)
+            td3.append(biblioteca.prestiti[j].lettore.cognome)
+
+            tr.append(td,td2,td3);
+            tabella.append(tr);
+
+        }
+        document.getElementById("tab").append(tabella);
+        
+    }
+
+    function mostraInventario() {
+        var tabella=document.createElement("table");
+        var thead=document.createElement("thead");
+        var th=document.createElement("th");
+        th.append("INVENTARIO LIBRI");
+        tabella.append(th);
+        
+       
+        
+        for(var j=0; j<biblioteca.inventario.length; j++ ){
+            var tr=document.createElement("tr");
+            var td4=document.createElement("td");
+            var td5=document.createElement("td");
+            var td6=document.createElement("td");
+            var td=document.createElement("td");
+            td.append(biblioteca.inventario[j].titolo)
+            td4.append(biblioteca.inventario[j].autore)
+            td5.append(biblioteca.inventario[j].annoPubblicazione)
+            td6.append(biblioteca.inventario[j].disponibile)
+            tr.append(td,td4,td5,td6);
+            tabella.append(tr);
+
+        }
+        document.getElementById("tab2").append(tabella);
+        
+    }
+
+
+    //18.Aggiungere un libro all'inventario
+
+    function aggiungiLibroInventario(){
+        titolo=document.getElementById("titolo").value;
+        autore=document.getElementById("autore").value;
+        genere=document.getElementById("genere").value;
+        anno=document.getElementById("annoPubblicazione").value;
+        tabella=document.getElementById("tab2");
+
+        l = new Libro(titolo,autore,genere,anno);
+        biblioteca.aggiungiLibro(l);
+
+        biblioteca.inventario.push(l);
+
+        var tr=document.createElement("tr");
+        var td=document.createElement("td");
+        
+        td.append(l.titolo)
+        tr.append(td);
+        tabella.append(tr);
+              
+    }
+
+
+    //19.Restituzioni di libri (Il libro da restituire deve essere scelto 
+    //tramite una select generata dinamicamente che mostra tutti i libri in prestito)
+
+    var select = document.getElementById("rest");
+    for(let i = 0; i < biblioteca.prestiti.length; i++){
+        var option = document.createElement("option");
+        option.innerHTML = biblioteca.prestiti[i].libro.titolo;
+        select.appendChild(option);
+    }
+
+    function restituisci(){
+        select=document.getElementById("rest")
+        libroDaRestituire=document.getElementById("rest").value;
+        tabella=document.getElementById("tab");
+        
+        for(let i = 0; i < biblioteca.prestiti.length; i++){
+            if(libroDaRestituire == biblioteca.prestiti[i].libro.titolo)
+                biblioteca.restituisciLibro(biblioteca.prestiti[i].lettore, biblioteca.prestiti[i].libro );
+                rimuoviOptionSelect(select,libroDaRestituire);
+                
+        }
+        
+        
+        mostraLibriInPrestito();
+        
+
+    }
+
+
+    function rimuoviOptionSelect(select, value) {
+        let options = select.options;
+
+        for (let i = 0; i < options.length; i++) {
+            if (options[i].value === value) {
+                select.remove(i);
+                alert("Socio rimosso dalla select")
+                break;
+            }
+        }
+    }
+
+
+
+
+  mostraInventario();
+  mostraLibriInPrestito();
+
+
+
+    
+  
+    
+</script>
+
+    
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

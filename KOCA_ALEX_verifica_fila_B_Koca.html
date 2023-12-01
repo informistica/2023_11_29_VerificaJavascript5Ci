@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <title>Koca Alex 5Ci</title>
+</head>
+
+<body>
+    <h1>Verifica Koca</h1>
+
+    <div class="d-flex justify-content-center" style="margin: 5px">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalMostraNoleggi" onclick="caricaNoleggi()">Mostra noleggi</button>
+    </div>
+
+    <div class="modal fade" id="modalMostraNoleggi" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Noleggi</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <!-- Body del modal -->
+                <div class="modal-body">
+                    <ul id="noleggi">
+
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="d-flex justify-content-center">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalVeicolo">Inserisci veicolo</button>
+    </div>
+
+    <div class="modal fade" id="modalVeicolo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Aggiungi socio</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <!-- Body del modal -->
+                <div class="modal-body">
+                    <!-- Form -->
+                    <form>
+
+                        <div class="mb-3">
+                            <label for="Targa" class="form-label">Targa</label>
+                            <input type="text" class="form-control" id="targa" aria-describedby="">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Marca" class="form-label">Marca</label>
+                            <input type="text" class="form-control" id="marca" aria-describedby="">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Modello" class="form-label">Modello</label>
+                            <input type="text" class="form-control" id="modello" aria-describedby="">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Tipo" class="form-label">Tipo</label>
+                            <input type="text" class="form-control" id="tipo" aria-describedby="">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Anno" class="form-label">Anno</label>
+                            <input type="number" class="form-control" id="anno" aria-describedby="">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="prezzoNoleggioOrario" class="form-label">Prezzo Noleggio Orario</label>
+                            <input type="number" class="form-control" id="prezzoNoleggioOrario" aria-describedby="">
+                        </div>
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick='aggiungiVeicolo()'>Aggiungi</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="d-flex justify-content-center">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalRestituzione" onclick="caricaRestituzioni()">Restituisci veicolo</button>
+    </div>
+
+    <div class="modal fade" id="modalRestituzione" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Restituzione</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <!-- Body del modal -->
+                <div class="modal-body">
+                    <!-- Form -->
+                    <form>
+                        <div class="mb-3">
+                            <select name="sedi" id="restituzione" class="form-select"></select>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick='restituzione()'>Restituisci</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Bootstrap-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <!--Script-->
+    <script>
+        //TRACCIA MODIFICATA IN CLASSE: IGNORARE LE ORE
+        class Veicolo {
+            constructor(targa, tipo, marca, modello, anno, prezzoNoleggioOrario) {
+                this.targa = targa;
+                this.tipo = tipo;
+                this.marca = marca;
+                this.modello = modello;
+                this.anno = Number.parseInt(anno);
+                this.prezzoNoleggioOrario = Number.parseFloat(prezzoNoleggioOrario);
+            }
+
+            calcolaCostoNoleggio() {
+                return prezzoNoleggioOrario;
+            }
+
+        }
+
+        class Cliente {
+            constructor(nome, cognome, numeroPatente) {
+                this.nome = nome;
+                this.cognome = cognome;
+                this.numeroPatente = numeroPatente;
+                this.noleggiEffettuati = [];
+            }
+
+            noleggiaVeicolo(veicolo) {
+                this.noleggiEffettuati.push(veicolo);
+            }
+
+            restituisciVeicolo(veicolo) {
+                for (let k = 0; k < this.noleggiEffettuati.length; k++)
+                    if (this.noleggiEffettuati[k].targa == veicolo.targa)
+                        this.noleggiEffettuati.splice(k, 1);
+            }
+
+        }
+
+        class CompagniaNoleggio {
+            constructor() {
+                this.inventario = [];
+                this.clienti = [];
+                this.noleggi = [];
+            }
+
+            aggiungiVeicolo(veicolo) {
+                for (let j = 0; j < this.inventario.length; j++)
+                    if (this.inventario[j].targa == veicolo.targa)
+                        return "Veicolo già presente";
+                this.inventario.push(veicolo);
+                return "Veicolo inserito";
+            }
+
+            registraCliente(cliente) {
+                for (let i = 0; i < this.clienti.length; i++)
+                    if (this.clienti[i].numeroPatente == cliente.numeroPatente)
+                        return "Cliente già presente";
+                this.clienti.push(cliente);
+                return "Cliente inserito";
+            }
+
+            effettuaNoleggio(cliente, veicolo) {
+                for (let i = 0; i < this.clienti.length; i++)
+                    if (this.clienti[i].numeroPatente == cliente.numeroPatente)
+                        for (let j = 0; j < this.inventario.length; j++)
+                            if (this.inventario[j].targa == veicolo.targa) {
+                                this.noleggi.push(veicolo);
+                                this.inventario.splice(j, 1);
+                                this.clienti[i].noleggiaVeicolo(veicolo);
+                            }
+            }
+
+            restituisciVeicolo(cliente, veicolo) {
+                for (let i = 0; i < this.clienti.length; i++)
+                    if (this.clienti[i].numeroPatente == cliente.numeroPatente)
+                        for (let j = 0; j < this.noleggi.length; j++)
+                            if (this.noleggi[j].targa == veicolo.targa) {
+                                this.inventario.push(veicolo);
+                                this.noleggi.splice(j, 1);
+                                this.clienti[i].restituisciVeicolo(veicolo);
+                            }
+            }
+
+            elencoVeicoliNoleggiati(cliente) {
+                for (let i = 0; i < this.clienti.length; i++)
+                    if (this.clienti[i].numeroPatente == cliente.numeroPatente)
+                        return this.clienti[i].noleggiEffettuati;
+            }
+        }
+        //DEBUG
+        /*
+        
+        NOTA IMPORTANTE: PROBLEMA DA CONSOLE IN LABORATORIO, NON PERMETTEVA DI VISUALIZZARE DA CONSOLE GLI OGGETTI VEICOLO. COPIA-INCOLLANDO I COMANDI 1 AD 1
+        INVECE ERA POSSIBILE VISUALIZZARE GLI ATTRIBUTI DEGLI OGGETTI VEICOLO.
+        
+        */
+        let compagnia = new CompagniaNoleggio();
+        let veicolo1 = new Veicolo("AA123AA", "Auto", "AUDI", "RS6", 2017, 50);
+        let veicolo2 = new Veicolo("NS888MW", "Auto", "BMW", "M3 GTR", 2005, 103);
+        let veicolo3 = new Veicolo("MW222WM", "Camion", "Renault", "Iveco", 2015, 20);
+
+        //Usare il codice patente poteva essere una chiave migliore D:
+        let cliente1 = new Cliente("Thomas", "Critelli", "MI8888888L");
+        let cliente2 = new Cliente("Davide", "Dusini", "MI1234567L");
+        let cliente3 = new Cliente("Giorgia", "Colombini", "MI0022002L");
+
+        compagnia.aggiungiVeicolo(veicolo1);
+        compagnia.aggiungiVeicolo(veicolo2);
+        compagnia.aggiungiVeicolo(veicolo3);
+
+        compagnia.registraCliente(cliente1);
+        compagnia.registraCliente(cliente2);
+        compagnia.registraCliente(cliente3);
+
+
+        compagnia.effettuaNoleggio(cliente1, veicolo1);
+        compagnia.effettuaNoleggio(cliente2, veicolo2);
+        compagnia.effettuaNoleggio(cliente3, veicolo3);
+
+        console.log("Tutti noleggiano 1");
+        console.log(compagnia.elencoVeicoliNoleggiati(cliente1));
+        console.log(compagnia.elencoVeicoliNoleggiati(cliente2));
+        console.log(compagnia.elencoVeicoliNoleggiati(cliente3));
+
+        // Verificare che il veicolo restituito sia nella lista di quelli noleggiati dal cliente (Extra)
+        compagnia.restituisciVeicolo(cliente1, veicolo1);
+        compagnia.restituisciVeicolo(cliente2, veicolo2);
+
+        console.log("CLIENTE 3 NON RESTITUISCE");
+        console.log(compagnia.elencoVeicoliNoleggiati(cliente1));
+        console.log(compagnia.elencoVeicoliNoleggiati(cliente2));
+        console.log(compagnia.elencoVeicoliNoleggiati(cliente3));
+
+        //console.log("CLIENTE 3 NOLEGGIA UN ALTRO E RESTITUISCE 2 ");
+        //compagnia.effettuaNoleggio(cliente3, veicolo2);
+        //compagnia.restituisciVeicolo(cliente3, veicolo3);
+        //compagnia.restituisciVeicolo(cliente3, veicolo2);
+
+        //console.log(compagnia.elencoVeicoliNoleggiati(cliente1));
+        //console.log(compagnia.elencoVeicoliNoleggiati(cliente2));
+        //console.log(compagnia.elencoVeicoliNoleggiati(cliente3));
+
+
+
+
+        //INTERFACCIA
+        function caricaNoleggi() {
+            lista = document.querySelector("#noleggi");
+            lista.innerHTML = "";
+            for (let i = 0; i < compagnia.noleggi.length; i++)
+                lista.innerHTML += `<li>${compagnia.noleggi[i].targa} - ${compagnia.noleggi[i].tipo} - ${compagnia.noleggi[i].modello} - ${compagnia.noleggi[i].marca}</li>`;
+        }
+
+        function aggiungiVeicolo() {
+            targa = document.querySelector("#targa").value;
+            tipo = document.querySelector("#tipo").value;
+            marca = document.querySelector("#marca").value;
+            modello = document.querySelector("#modello").value;
+            anno = document.querySelector("#anno").value;
+            prezzoNoleggioOrario = document.querySelector("#prezzoNoleggioOrario").value;
+
+
+            veicolo = new Veicolo(targa, tipo, marca, modello, anno, prezzoNoleggioOrario);
+            compagnia.aggiungiVeicolo(veicolo);
+        }
+
+        function caricaRestituzioni() {
+            lista = document.querySelector("#restituzione");
+            lista.innerHTML = "";
+            for (let i = 0; i < compagnia.noleggi.length; i++)
+                lista.innerHTML += `<option value = "${compagnia.noleggi[i].targa}">${compagnia.noleggi[i].targa} - ${compagnia.noleggi[i].marca}</option>`;
+        }
+
+        function restituzione() {
+            let veicolo = document.querySelector("#restituzione").value;
+
+            for (let i = 0; i < compagnia.noleggi.length; i++)
+                if (compagnia.noleggi[i].targa == veicolo)
+                    veicolo = compagnia.noleggi[i];
+
+            for (let i = 0; i < compagnia.clienti.length; i++)
+                for (let j = 0; j < compagnia.clienti[i].noleggiEffettuati.length; j++)
+                    if (compagnia.clienti[i].noleggiEffettuati[j].targa == veicolo.targa)
+                        compagnia.restituisciVeicolo(compagnia.clienti[i], veicolo); //Il cliente giusto consegna l'auto giusta
+        }
+    </script>
+
+</body>
+
+</html>
