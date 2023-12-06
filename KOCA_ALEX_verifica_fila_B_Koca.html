@@ -50,7 +50,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Aggiungi socio</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Aggiungi veicolo</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <!-- Body del modal -->
@@ -296,6 +296,14 @@
 
             veicolo = new Veicolo(targa, tipo, marca, modello, anno, prezzoNoleggioOrario);
             compagnia.aggiungiVeicolo(veicolo);
+
+
+            targa = document.querySelector("#targa").value = "";
+            tipo = document.querySelector("#tipo").value = "";
+            marca = document.querySelector("#marca").value = "";
+            modello = document.querySelector("#modello").value = "";
+            anno = document.querySelector("#anno").value = "";
+            prezzoNoleggioOrario = document.querySelector("#prezzoNoleggioOrario").value = "";
         }
 
         function caricaRestituzioni() {
