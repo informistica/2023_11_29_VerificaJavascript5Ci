@@ -2,12 +2,131 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verifica Fila B Marinelli</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
     <h3>Agenzia Noleggio Auto Marinelli</h3>
-    <p id="lista"> Lista Veicoli Noleggiati: </p>
+    <p>VEICOLI PRESENTI</p>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Tipo</label>
+                        <select class="form-control" id="tipo">
+                            <option>suv</option>
+                            <option>sportiva</option>
+                            <option>mini</option>
+                            <option>4x4</option>
+                            <option>quadriciclo</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Marca</label>
+                        <select class="form-control" id="marca">
+                            <option>Ferrari</option>
+                            <option>Honda</option>
+                            <option>Fiat</option>
+                            <option>Renault</option>
+                            <option>Lamborghini</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Modello</label>
+                        <select class="form-control" id="modello">
+                            <option>G12</option>
+                            <option>A19</option>
+                            <option>RW7</option>
+                            <option>PL8</option>
+                            <option>VC2</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Anno</label>
+                        <select class="form-control" id="anno">
+                            <option>2019</option>
+                            <option>2020</option>
+                            <option>2015</option>
+                            <option>1990</option>
+                            <option>2023</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Prezzo Noleggio Orario</label>
+                        <select class="form-control" id="prezzo">
+                            <option>500</option>
+                            <option>100</option>
+                            <option>130</option>
+                            <option>50</option>
+                            <option>550</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
+                    <button type="button" class="btn btn-primary"  onclick="aggiungiInventario()">Aggiungi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Veicolo 1</label>
+                        <select class="form-control" id="noleggiato">
+                            
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
+                    <button type="button" class="btn btn-primary"  onclick="mostraNoleggiati()">Seleziona</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <table class="table" id="tab">
+        <thead>
+        <tr>
+            <th scope="col">Tipo</th>
+            <th scope="col">Marca</th>
+            <th scope="col">Modello</th>
+            <th scope="col">Anno</th>
+            <th scope="col">Prezzo Noleggio</th>
+        </tr>
+        </thead>
+        <tbody>
+        
+        </tbody>
+    </table>
+
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Aggiungi un veicolo all'inventario</button>
+
+    <p>VEICOLI NOLEGGIATI</p>
+
+    <table class="table" id="tabNoleggi">
+        <thead>
+        <tr>
+            <th scope="col">Tipo</th>
+            <th scope="col">Marca</th>
+            <th scope="col">Modello</th>
+            <th scope="col">Anno</th>
+            <th scope="col">Prezzo Noleggio</th>
+        </tr>
+        </thead>
+        <tbody>
+        
+        </tbody>
+    </table>
+
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal2">Restituisci un veicolo dai noleggiati</button>
 
     <script>
         class Veicolo{
@@ -128,11 +247,99 @@
         console.log("Lista dei veicoli noleggiati: ")
         console.log(compagnia.noleggi)
 
-        let lista = compagnia.noleggi;
-        document.getElementById("lista").innerHTML+="<li>"+lista.veicolo+"</li>";
+        mostraInventario();
+        mostraNoleggiati();
+
+        //18: Aggiungere un veicolo all'inventario
+        function aggiungiInventario(){
+            let tipo = document.getElementById("tipo").value;
+            let marca = document.getElementById("marca").value;
+            let modello = document.getElementById("modello").value;
+            let anno = document.getElementById("anno").value;
+            let prezzo = document.getElementById("prezzo").value;
+            v = new Veicolo(tipo,marca,modello,anno,prezzo);
+            compagnia.aggiungiVeicolo(v);
+            alert("Veicolo aggiunto con successo all'inventario!")
+            mostraInventario();
+        }
+
+        function mostraInventario(){
+            let tab = document.getElementById("tab");
+            tab.innerHTML = "";
+            var th1=document.createElement("th");
+            var th2=document.createElement("th");
+            var th3=document.createElement("th");
+            var th4=document.createElement("th");
+            var th5=document.createElement("th");
+            th1.append("Tipo");
+            th2.append("Marca");
+            th3.append("Modello");
+            th4.append("Anno");
+            th5.append("Prezzo Noleggio");
+            tab.append(th1,th2,th3,th4,th5);
+            for (let i = 0; i < compagnia.inventario.length; i++) {
+                console.log(compagnia.inventario[i])
+                var tr=document.createElement("tr");
+                var td1=document.createElement("td");
+                var td2=document.createElement("td");
+                var td3=document.createElement("td");
+                var td4=document.createElement("td");
+                var td5=document.createElement("td");
+                td1.append(compagnia.inventario[i].tipo);
+                td2.append(compagnia.inventario[i].marca); 
+                td3.append(compagnia.inventario[i].modello); 
+                td4.append(compagnia.inventario[i].anno); 
+                td5.append(compagnia.inventario[i].prezzoNoleggioOrario);
+                tr.append(td1,td2,td3,td4,td5);
+                tab.append(tr);   
+            }
+        }
+
+        //19: Restituzioni di veicoli
+        var select = document.getElementById("noleggiato");
+        for(let i = 0; i < compagnia.noleggi.length; i++){
+            var option = document.createElement("option");
+            option.innerHTML = compagnia.noleggi[i].veicolo.marca;
+            select.appendChild(option);
+        }
+        
+        function mostraNoleggiati(){
+            let tab = document.getElementById("tabNoleggi");
+            tab.innerHTML = "";
+            var th1=document.createElement("th");
+            var th2=document.createElement("th");
+            var th3=document.createElement("th");
+            var th4=document.createElement("th");
+            var th5=document.createElement("th");
+            th1.append("Tipo");
+            th2.append("Marca");
+            th3.append("Modello");
+            th4.append("Anno");
+            th5.append("Prezzo Noleggio");
+            tab.append(th1,th2,th3,th4,th5);
+            for (let i = 0; i < compagnia.noleggi.length; i++) {
+                console.log(compagnia.noleggi[i])
+                var tr=document.createElement("tr");
+                var td1=document.createElement("td");
+                var td2=document.createElement("td");
+                var td3=document.createElement("td");
+                var td4=document.createElement("td");
+                var td5=document.createElement("td");
+                td1.append(compagnia.noleggi[i].veicolo.tipo);
+                td2.append(compagnia.noleggi[i].veicolo.marca); 
+                td3.append(compagnia.noleggi[i].veicolo.modello); 
+                td4.append(compagnia.noleggi[i].veicolo.anno); 
+                td5.append(compagnia.noleggi[i].veicolo.prezzoNoleggioOrario);
+                tr.append(td1,td2,td3,td4,td5);
+                tab.append(tr);   
+            }
+        }
 
         
 
     </script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>
