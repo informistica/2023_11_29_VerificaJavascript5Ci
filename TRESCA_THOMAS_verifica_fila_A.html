@@ -98,8 +98,9 @@
               <div class="form-row">
               <div class="form-group col-md-6">
                   <label for="inputCorso">Scegli il libro da restituire: </label>
-                  <select id="inputVisualizzazioneRestituzione" class="form-control">
+                  <select id="libriInPrestito" class="form-control">
                     <option selected>N/A</option>
+                    
                   </select>
               </div>
             </div>
@@ -204,10 +205,11 @@
     // Elenchiamo i libri in prestito qua almeno si vedono
     console.log(biblioteca.elencoLibriInPrestito());
     // Restituiamo dei libri
-    biblioteca.restituisciPrestito(lettore1, libro1);
-    biblioteca.restituisciPrestito(lettore2, libro2);
+    //biblioteca.restituisciPrestito(lettore1, libro1);
+    //biblioteca.restituisciPrestito(lettore2, libro2);
     // Rielenchiamo i libri in prestito, così si vede l' aggiornamento
     console.log(biblioteca.elencoLibriInPrestito());
+    getLibriInPrestito();
 
     function aggiungiLibro() {
         let titolo = document.getElementById("inputTitolo").value;
@@ -231,10 +233,19 @@
         }
         output.innerHTML = stringa;
     }
-    function getLibri() {
-        
+    function getLibriInPrestito() {
+      let stringa = "";
+      console.log(biblioteca.prestitiAttuali.length);
+      for(let i = 0; i<biblioteca.prestitiAttuali.length; i++){
+            console.log(i);
+            let libro = biblioteca.prestitiAttuali[i].titolo;
+            stringa += `<option value="${libro}">${libro}</option>`;
     }
+    console.log("244");
+    console.log(stringa);
+    document.getElementById("libriInPrestito").innerHTML = stringa;  
 
+  }
 
 </script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
