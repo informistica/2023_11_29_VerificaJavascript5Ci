@@ -7,7 +7,75 @@
 </head>
 <h1> Gestione Biblioteca Oberto </h1>
 
-<p id="listaLibriInPrestito"> Lista libri in prestito: </p>
+<div id="listaLibriInPrestito"> Lista libri in prestito: </div>
+<br>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+    Aggiungi libro
+  </button>
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Aggiungi libro</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form>
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">titolo</label>
+                    <br>
+                    <input type="email" class="form-control" id="titolo" placeholder="Inserisci il titolo">
+                </div>
+                <div class="form-group">
+                  <label for="exampleFormControlInput1">autore</label>
+                  <br>
+                  <input type="email" class="form-control" id="autore" placeholder="Inserisci il autore">
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">genere</label>
+                    <br>
+                    <input type="email" class="form-control" id="genere" placeholder="Inserisci il genere">
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">anno pubblicazione</label>
+                    <br>
+                    <input type="email" class="form-control" id="anno_Pubblicazione" placeholder="Inserisci la anno pubblicazione">
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlSelect1">disponibile</label>
+                    <br>
+                    <select class="form-control" id="disponibile">
+                        <option>true</option>
+                        <option>false</option>
+                    </select>
+                  </div>
+              </form>
+              <br>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
+          <button type="button" class="btn btn-primary" onclick="btnInserisci()"> Aggiungi</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <table class="table" id="tab">
+    <thead>
+      <tr>
+        <th scope="col">Titolo</th>
+        <th scope="col">Autore</th>
+        <th scope="col">Genere</th>
+        <th scope="col">Anno pubblicazione</th>
+        <th scope="col">Disponibile</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
 
 <body>
     
@@ -129,7 +197,7 @@
         }
 
         //Creazione di un libro 
-        const libro1 = new Libro(1984, "Orwell", "distopico", 1948 , true);
+        const libro1 = new Libro("1984", "Orwell", "distopico", 1948 , true);
         const libro2 = new Libro("Harry Potter", "J.K. Rowling", "fantasy", 2000 , true);
         const libro3 = new Libro("Harry Potter e la pietra filosofale", "J.K. Rowling", "fantasy", 2006 , true);
 
@@ -138,6 +206,9 @@
 
         //Agginta del libro all'inventario
         biblioteca.aggiungiLibro(libro1);
+        biblioteca.aggiungiLibro(libro2);
+        biblioteca.aggiungiLibro(libro3);
+
 
         //Creazione lettore
         const lettore1 = new Lettore("Sara", "Oberto", 1234, 0);
@@ -159,11 +230,90 @@
         biblioteca.listaLibriInPrestito();
 
         //Libri in prestito
+        document.getElementById("listaLibriInPrestito").innerHTML = " Libri attualmente in prestito: " ;
         for(let i = 0; i < biblioteca.prestiti.length; i++){
-            document.getElementById("listaLibriInPrestito").innerHTML = " Libri attualmente in prestito: " + biblioteca.prestiti[i].libro.titolo;
+            var p = document.createElement("p")
+            p.innerHTML =  biblioteca.prestiti[i].libro.titolo;
+            document.getElementById("listaLibriInPrestito").append(p);
+        
         }
+
+        stampaBiblioteca();
+
+        let titolo,autore,genere,anno_Pubblicazione,disponibile,cont=3; 
+        let t=document.getElementById("tab");
+        let tbody=t.children[1];
+        let stringa=tbody.innerHTML;
+
+        
+
+        //Aggiungere un libro all'inventario
+        function btnInserisci(){          
+            if(document.getElementById("titolo").value == "")
+                alert("Devi inserire tutti i dati");
+            else
+                titolo = document.getElementById("titolo").value;
+
+            if(document.getElementById("autore").value == "")
+                alert("Devi inserire tutti i dati");
+            else
+                autore = document.getElementById("autore").value;
+
+            if(document.getElementById("genere").value == "")
+                alert("Devi inserire tutti i dati");
+            else
+                genere = document.getElementById("genere").value;
+
+            if(document.getElementById("anno_Pubblicazione").value == "")
+                alert("Devi inserire tutti i dati");
+            else
+                anno_Pubblicazione = document.getElementById("anno_Pubblicazione").value;
+
+            if(document.getElementById("disponibile").value == "")
+                alert("Devi inserire tutti i dati");
+            else
+                disponibile = document.getElementById("disponibile").value;
+
+            libro = new Libro(titolo, autore, genere, anno_Pubblicazione, disponibile);
+            biblioteca.aggiungiLibro(libro);
+
+            stampaBiblioteca();
+
+        }
+        function stampaBiblioteca(){
+            let tab = document.getElementById("tab");
+            tab.innerHTML = "";
+
+            for(var i=0; i < biblioteca.inventario.length; i++){
+                var tr = document.createElement("tr");
+                var td1 = document.createElement("td");
+                var td2 = document.createElement("td");
+                var td3 = document.createElement("td");
+                var td4 = document.createElement("td");
+                var td5 = document.createElement("td");
+
+                td1.append(biblioteca.inventario[i].titolo)
+                td2.append(biblioteca.inventario[i].autore)
+                td3.append(biblioteca.inventario[i].genere)
+                td4.append(biblioteca.inventario[i].anno_Pubblicazione)
+                td5.append(biblioteca.inventario[i].disponibile)
+                
+                tr.append(td1,td2,td3,td4,td5);
+                tab.append(tr);
+                
+            }
+           
+
+
+
+        }
+        
 
         
     </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>
