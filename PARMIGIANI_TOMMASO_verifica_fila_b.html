@@ -12,14 +12,14 @@
                 this.tipo = tipo;
                 this.targa = targa;
                 this.marca = marca;
-                this.modello = mdello;
+                this.modello = modello;
                 this.anno = anno;
                 this.prezzoNoleggioOrario = prezzoNoleggioOrario;
             }
 
             calcolaCostoNoleggio(ore){
-                costoNoleggio = 0;
-                costoNoleggio = prezzoNoleggioOrario*ore;
+                //Correzione
+                return ore*this.prezzoNoleggioOrario;
             }
         }
 
@@ -31,10 +31,13 @@
                 this.noleggiEffettuati = noleggiEffettuati;
             }
             noleggiaVeicolo(veicolo,ore){
-                
+                //Correzione
+                this.noleggiEffettuati.push(veicolo);
             }
             restituisciVeicolo(veicolo){
-
+                //Correzione
+                if(this.noleggiEffettuati.length > 0)
+                    this.noleggiEffettuati.pop(veicolo);
             }
         }
 
@@ -50,19 +53,27 @@
             }
             
             registraClienti(cliente){
-                
+                //Correzione
+                this.clienti.push(cliente);
             }
 
             effettuaNoleggio(cliente,veicolo,ore){
-
+                //Correzione
+                this.noleggi.push(veicolo);
+                this.inventario.pop(veicolo);
+                cliente.noleggiaVeicolo(veicolo);
             }
 
             requisisciVeicolo(cliente,veicolo){
-
+                //Correzione
+                this.noleggi.pop(veicolo);
+                this.inventario.push(veicolo);
+                cliente.restituisciVeicolo(veicolo);
             }
 
             elencoVeicoliNoleggiati(clienti){
-                return this.cliente.clienti
+                //Correzione
+                return cliente.noleggiEffettuati;
             }
             
         }
@@ -71,19 +82,100 @@
     let veicoloB = new Veicolo("lusso-sport","48GS38A","Bentley","Continental-GT",2023,850);
     let veicoloC = new Veicolo("lusso","6HJ2P5N","mercedes-maybach","S600",2023,1000);
 
-    let compagniaNoleggio = new CampagniaNoleggio()
-    compagniaNoleggio.aggiungiVeicolo(veicoloA)
-    compagniaNoleggio.aggiungiVeicolo(veicoloB)
-    compagniaNoleggio.aggiungiVeicolo(veicoloC)
-
     let clienteA = new Cliente("Franco","Bianchi","B",3);
     let clienteB = new Cliente("Marco","Rossi","A",4);
     let clienteC = new Cliente("Giovanni","Verdi","B",3);
 
-    let compagnianoleggio = new CampagniaNoleggio()
-    compagniaNoleggio.aggiungiVeicolo(cliente)
-    compagniaNoleggio.aggiungiVeicolo(clienteB)
-    compagniaNoleggio.aggiungiVeicolo(clienteC)
+    //Correzione
+    let compagniaNoleggio = new CampagniaNoleggio()
+    
+    compagniaNoleggio.aggiungiVeicolo(veicoloA)
+    compagniaNoleggio.aggiungiVeicolo(veicoloB)
+    compagniaNoleggio.aggiungiVeicolo(veicoloC)
+
+    compagniaNoleggio.registraClienti(clienteA)
+    compagniaNoleggio.registraClienti(clienteB)
+    compagniaNoleggio.registraClienti(clienteC)
+
+    compagniaNoleggio.effettuaNoleggio(clienteA, veicoloA) 
+    compagniaNoleggio.effettuaNoleggio(clienteB, veicoloB)
+    compagniaNoleggio.effettuaNoleggio(clienteC, veicoloC)
+
+    compagniaNoleggio.restituisciVeicolo(clienteA, veicoloA)
+
+        console.log(compagniaNoleggio.elencoVeicoliNoleggiati(clienteA))
+        console.log(compagniaNoleggio.elencoVeicoliNoleggiati(clienteB))
+        console.log(compagniaNoleggio.elencoVeicoliNoleggiati(clienteC))
+
+        let stringa = "";
+        for(let i = 0; i < compag.clienti.length; i++){
+            stringa += `<option value=${i}>${compag.clienti[i].nome}</option>`;
+        }
+        document.getElementById("clientiRestituzione").innerHTML = stringa;
+        document.getElementById("clientiNoleggia").innerHTML = stringa;
+
+        function modificaTabella(){
+            let tbody = document.getElementById("outputVeicoli");
+            let stringa = "";
+            compag.noleggi.forEach(veicolo => {
+                stringa += `<tr><td>${veicolo.targa}</td>`;
+                stringa += `<td>${veicolo.tipo}</td>`;
+                stringa += `<td>${veicolo.marca}</td>`;
+                stringa += `<td>${veicolo.modello}</td>`;
+                stringa += `<td>${veicolo.anno}</td>`;
+                stringa += `<td>${veicolo.prezzoNoleggioOrario}</td></tr>`;
+            });
+            tbody.innerHTML = stringa;
+        }
+
+        function aggiungiVeicolo() {
+            let targa = document.getElementById("Targa").value;
+            let tipo = document.getElementById("Tipo").value;
+            let marca = document.getElementById("Marca").value;
+            let modello = document.getElementById("Modello").value;
+            let anno = document.getElementById("Anno").value;
+            let prezzoOra = document.getElementById("PrezzoOra").value;
+
+            let veicoloAggiunto = new Veicolo(targa, tipo, marca, modello, anno, prezzoOra);
+            compag.aggiungiVeicolo(veicoloAggiunto);
+        }
+
+        function modificaSelectRestituzione(){
+            let cliente = compag.clienti[document.getElementById("clientiRestituzione").value];
+            let vetAuto = compag.elencoVeicoliNoleggiati(cliente);
+
+            let tbody = document.getElementById("noleggiate");
+            let stringa = "";
+
+            for(let i = 0; i < vetAuto.length; i++){
+                stringa += `<option value=${i}>${vetAuto[i].targa}</option>`;
+            }
+            tbody.innerHTML = stringa;
+        }
+
+        function restituisciVeicolo(){ 
+            let cliente = compag.clienti[document.getElementById("clientiRestituzione").value];
+            let autoRestituita = cliente.noleggiEffettuati[document.getElementById("noleggiate").value];
+            compag.restituisciVeicolo(cliente, autoRestituita)
+        }
+
+        function modificaSelectNoleggio(){
+            let vetAuto = compag.inventario
+
+            let tbody = document.getElementById("disponibili");
+            let stringa = "";
+
+            for(let i = 0; i < vetAuto.length; i++){
+                stringa += `<option value=${i}>${vetAuto[i].targa}</option>`;
+            }
+            tbody.innerHTML = stringa;
+        }
+
+        function noleggiaVeicolo(){
+            let cliente = compag.clienti[document.getElementById("clientiRestituzione").value];
+            let autonoleggiata = cliente.noleggiEffettuati[document.getElementById("noleggiate").value];
+            compag.effettuaNoleggio(cliente, autonoleggiata);
+        }
 
     </script>
 </body>
