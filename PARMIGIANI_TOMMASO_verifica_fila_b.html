@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noleggio_Automobile</title>
+</head>
+<body>
+    <script>
+        class Veicolo{
+            constructor(tipo,targa,marca,modello,anno,prezzoNoleggioOrario){
+                this.tipo = tipo;
+                this.targa = targa;
+                this.marca = marca;
+                this.modello = mdello;
+                this.anno = anno;
+                this.prezzoNoleggioOrario = prezzoNoleggioOrario;
+            }
+
+            calcolaCostoNoleggio(ore){
+                costoNoleggio = 0;
+                costoNoleggio = prezzoNoleggioOrario*ore;
+            }
+        }
+
+        class Cliente{
+            constructor(nome,cognome,numeroPatente,noleggiEffettuati){
+                this.nome = nome;
+                this.cognome = cognome;
+                this.numeroPatente = numeroPatente;
+                this.noleggiEffettuati = noleggiEffettuati;
+            }
+            noleggiaVeicolo(veicolo,ore){
+                
+            }
+            restituisciVeicolo(veicolo){
+
+            }
+        }
+
+        class CampagniaNoleggio{
+            constructor(inventario,cliente,noleggi){
+                this.inventario = [];
+                this.cliente = [];
+                this.noleggi = []; 
+            }
+
+            aggiungiVeicolo(veicolo){
+                this.inventario.push(veicolo);
+            }
+            
+            registraClienti(cliente){
+                
+            }
+
+            effettuaNoleggio(cliente,veicolo,ore){
+
+            }
+
+            requisisciVeicolo(cliente,veicolo){
+
+            }
+
+            elencoVeicoliNoleggiati(clienti){
+                return this.cliente.clienti
+            }
+            
+        }
+
+    let veicoloA = new Veicolo("lusso","A5VV73A","RR","Ghost",2022,900);
+    let veicoloB = new Veicolo("lusso-sport","48GS38A","Bentley","Continental-GT",2023,850);
+    let veicoloC = new Veicolo("lusso","6HJ2P5N","mercedes-maybach","S600",2023,1000);
+
+    let compagniaNoleggio = new CampagniaNoleggio()
+    compagniaNoleggio.aggiungiVeicolo(veicoloA)
+    compagniaNoleggio.aggiungiVeicolo(veicoloB)
+    compagniaNoleggio.aggiungiVeicolo(veicoloC)
+
+    let clienteA = new Cliente("Franco","Bianchi","B",3);
+    let clienteB = new Cliente("Marco","Rossi","A",4);
+    let clienteC = new Cliente("Giovanni","Verdi","B",3);
+
+    let compagnianoleggio = new CampagniaNoleggio()
+    compagniaNoleggio.aggiungiVeicolo(cliente)
+    compagniaNoleggio.aggiungiVeicolo(clienteB)
+    compagniaNoleggio.aggiungiVeicolo(clienteC)
+
+    </script>
+</body>
+</html>
