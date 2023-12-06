@@ -23,22 +23,23 @@
     
                 <p>titolo:</p>
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="nome" placeholder="inserisci il nome">
+                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="nome" placeholder="inserisci il titolo">
                 </div>
     
                 <p>autore:</p>
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="cognome" placeholder="inserisci cognome">
+                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="cognome" placeholder="inserisci autore">
                 </div>
     
                 <p>genere:</p>
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="periodoIscrizione" placeholder="inserisci il periodo d'iscrizione">
+                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="periodoIscrizione" placeholder="inserisci il genere">
                 </div>
+
     
                 <p>anno Pubblicazione:</p>
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="quotaMensile" placeholder="inserisci la quota mensile">
+                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="quotaMensile" placeholder="inserisci anno pubblicazione">
                 </div>
     
 
@@ -90,26 +91,20 @@
     <script>
 
 class Libro{
-            constructor(titolo,autore,genere,annoPubblicazione,disponibile,libri){
+            constructor(titolo,autore,genere,annoPubblicazione,disponibile){
                 this.titolo=titolo;
                 this.autore=autore;
                 this.genere=genere;
                 this.annoPubblicazione=annoPubblicazione;
                 this.disponibile=true;
-                this.libri=new Array();
             }
 
-            disponibile(titolo){
-                for(let i = 0; i<libri.lenght; i++){
-                    if(libri[i].titolo==this.titolo)
-                        return "libro disponibile";
-                }
-                
-                return "libro non disponibile";
-            }
+            disponibilità(disp){
+                this.disponibile==disp;
+            } 
         }
 class Lettore {
-    constructor(nome,cognome,numeroTessera,prestiti){
+    constructor(nome,cognome,numeroTessera){
                 this.nome=nome;
                 this.cognome=cognome;
                 this.numeroTessera=numeroTessera;
@@ -127,17 +122,18 @@ class Lettore {
 
         restituisciLibro(libro){
             for(let i=0;i<prestiti.length;i++){
-                if(libro.titolo== this.lettore.prestiti[i].titolo)
-                    libro.disponibile=true;
+                if(libro.titolo== this.prestiti[i].titolo)
+                    libro[i].disponibile=true;
+                    return this.prestiti[i];
             }
         
         }
 }
 class Biblioteca{
-    constructor(inventario,lettori, prestiti){
+    constructor(){
         this.inventario=new Array();
         this.lettori=new Array();
-        this.prestitiB=new Array();
+        this.prestiti=new Array();
     }
 
     aggiungiLibro(libro){
@@ -149,24 +145,29 @@ class Biblioteca{
     }
 
     effettuaPrestito(lettore, libro){
-        for(let i=0;i<prestiti.length;i++)
-            if( lettore.nome == libro.prestiti[i].nome)
-                libro.prestiti[i].disponibile=false;
+        this.prestiti.push({lettore, libro});
+        for(let i=0;i<this.prestiti.length;i++)
+            if(this.prestiti[i].libro.titolo == libro.titolo)
+                this.prestiti[i].libro.disponibile=false;
     }
 
     restituisciLibro(lettore,libro){
-            for(let i=0;i<prestiti.length;i++){
-                if(libro.titolo== lettore.prestiti[i].titolo)
-                    libro.disponibile=true;
+            let libro_rimosso;
+            for (let i = 0; i < this.prestiti.length; i++) {
+                const prestito = this.prestiti[i];
+                this.prestiti[i].libro.titolo == libro.titolo
+                if (prestito.lettore === lettore && prestito.libro === libro) {
+                    libro_rimosso = this.prestiti.splice(i, 1)[0];
+                    prestito.libro.disponibile = true;
+                    break;
+                }
+  
             }
+
         }
     
     listaLibriInPrestito(){
-        for(let i=0;i<prestiti.length;i++){
-            if(biblioteca.prestiti[i].disponibile)
-                this.prestitiB.push(biblioteca.prestiti[i]);
-        }
-        return prestitiB;
+        return this.prestiti;
     } 
     
 }
@@ -177,12 +178,12 @@ function aggiungiLibro(){
     let autore=document.getElementById("autore").value;
     let genere=document.getElementById("genere").value;
     let annoPubblicazione=parseInt(document.getElementById("annoPubblicazione").value);
-    let disponibile=document.getElementById("disponibile").value;
-
+    let l=new Libro(titolo,autore,genere,annoPubblicazione,true);
+    
     for(let libri of biblioteca.inventario){
         if(libri.nome==biblioteca.inventario[i].nome)
             biblioteca.aggiungiLibro(libro);
-        }
+    }
 
     let tbody=document.getElementById("tbody");
             
@@ -221,6 +222,8 @@ function aggiungiLibro(){
             document.getElementById("annoPubblicazione").value="";
     }
 
+    
+
     function registraLettore(){
     let nome=document.getElementById("nome").value;
     let cognome=document.getElementById("cognome").value;
@@ -238,11 +241,9 @@ function aggiungiLibro(){
     }
 
 
-    function registraPrestiti(){
-
-    }
 
         let biblioteca= new Biblioteca();
+        //12
         let libro1 = new Libro('titolo1','autore1','genere1',1990,true);
         let libro2 = new Libro('titolo2','autore2','genere2', 2000,true);
         let libro3 = new Libro('titolo3','autore3','genere3', 2010, true);
@@ -251,16 +252,33 @@ function aggiungiLibro(){
         biblioteca.aggiungiLibro(libro2);
         biblioteca.aggiungiLibro(libro3);
 
-
-        let lettore1= new Lettore("nome1","cognome1","numeroTessera1");  
-        let lettore2= new Lettore("nome2","cognome2","numeroTessera2"); 
-        let lettore3= new Lettore("nome3","cognome3","numeroTessera3"); 
+        //13
+        let lettore1= new Lettore("nome1","cognome1",1);  
+        let lettore2= new Lettore("nome2","cognome2",2); 
+        let lettore3= new Lettore("nome3","cognome3",3); 
 
         biblioteca.registraLettore(lettore1);
         biblioteca.registraLettore(lettore2);
         biblioteca.registraLettore(lettore3);
 
-        let libri=[libro1,libro2,libro3];
+        //14
+        biblioteca.effettuaPrestito(lettore1,libro1);
+        biblioteca.effettuaPrestito(lettore2,libro2);
+        biblioteca.effettuaPrestito(lettore3,libro3);
+
+        //15
+        biblioteca.restituisciLibro(lettore2,libro2);
+
+        //16
+        biblioteca.listaLibriInPrestito();
+
+       
+        tbody=document.getElementById("tab");
+        for(let i=0; i<biblioteca.inventario.length;i++){
+            let riga=`<tr><td>${biblioteca.inventario[i].titolo} </td> <td>${biblioteca.inventario[i].autore} </td> <td>${biblioteca.inventario[i].genere} </td> <td>${biblioteca.inventario[i].annoPubblicazione} </td></tr>`;
+            tbody.innerHTML+=riga;
+    }
+
         /*for(let libro of libri) {
           const p = document.createElement("p");
           p.id="tot"+libro.nome; 
