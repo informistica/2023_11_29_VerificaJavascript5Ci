@@ -8,6 +8,28 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <title>Biblioteca</title>
+    <!-- Aggiunta correzione -->
+    <style>
+      #starter {
+        margin-top: 20px;
+        margin-left: 10px;
+        margin-bottom: 10px;
+      }
+      #btnVisCorsi {
+        margin-top: 20px;
+        margin-left: 10px;
+        margin-bottom: 10px;
+      }
+      #btnTotaleIncassi {
+        margin-top: 20px;
+        margin-left: 10px;
+        margin-bottom: 10px;
+      }
+      #title {
+        margin-top: 10px;
+        margin-left: 10px;
+      }
+  </style>
 </head>
 <body>
     <h1>Biblioteca</h1>
@@ -81,7 +103,49 @@
       </div>
     </div>
   </div>
+  <!--  Correzione -->
+  <div class="modal" tabindex="-1" role="dialog" id="exampleModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Restituzione Libro</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form>
+               
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">Libro da restituire</label>
+                    <select class="form-control" id="libriprestati">
+                
 
+                    </select>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" onclick="restituzioneLibro()">Restituisci</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
+        </div>
+        </div>
+    </div>
+    </div>
+    <button type="button" class="btn btn-primary" onclick="elenco()">Elenco dei libri in prestito</button>
+      <table id="tabella" class="table table-striped" >
+        <thead>
+            <tr>
+                <th scope="col">Titolo</th>
+                <th scope="col">Autore</th>
+                <th scope="col">Genere</th>
+                <th scope="col">Anno di Pubblicazione</th>
+                <th scope="col">Disponibilità</th>
+              </tr>
+        </thead>
+        <tbody id = "tabCorpo">
+
+        </tbody>
     <script>
         class Libro{
             constructor(titolo,autore,genere,annoPubblicazione,disponibile){//Creazione del costruttore
@@ -92,11 +156,14 @@
                 this.disponibile = disponibile;
             }
 
-            disponibile(){//Verifico se il libro è disponibile
-                return disponibile;
+            setDisponibile(disponib){
+                this.disponibile=disponib;
+            }
+            disponibile(){
+                return this.disponibile;
             }
         }
-
+         
         class Lettore{
             constructor(nome,cognome,numeroTessera){//Creazione del costruttore
                 this.nome = nome;
@@ -105,12 +172,31 @@
                 this.vettPrestiti = [];
             }
 
-            aggiungiPrestito(libro){//Aggiungo un libro nel vettore dei libri prestati
+            aggiungiPrestito(libro){//Correzione
+              for(let libri in this.vettPrestiti){
+                    if(this.vettPrestiti[libri]===libro.titolo){
+                        console.log("il libro non può essere prestato");
+                        return false;
+                    }
+                
+                }
+                console.log("Libro prestato");
                 this.vettPrestiti.push(libro);
+                libro.setDisponibile(false);
+                return true;
             }
 
-            restituisciLibro(libro){//Rimuovo dal vettore dei libri prestati il libro che voglio restituire
-                this.vettPrestiti.pop(libro);
+            restituisciLibro(libro){//Correzione
+              for(let libri in this.vettPrestiti){
+                    if(this.vettPrestiti[libri].titolo===libro.titolo){
+                        this.vettPrestiti.splice(libri,1);
+                        console.log("Libro restituito");
+                        libro.setDisponibile(true);
+                        return true;
+                    }
+                }
+               console.log("Il libro non è stato trovato");
+               return false;
             }
         }
 
@@ -138,8 +224,12 @@
                 lettore.restituisciLibro(libro);
             }
 
-            listaLibriInPrestito(){//Mostro tramite il vettore la lista dei libri in prestito
-                    return this.vettLibPrestiti;
+            listaLibriInPrestito(){//Correzione
+              let lista="";
+                for(let i=0; i<this.vettLibPrestiti.length;i++){
+                    lista+= this.vettLibPrestiti[i].titolo + ", ";
+                }
+                return lista; 
             }
         }
 
@@ -177,6 +267,17 @@
         //Elenco dei libri attualmente in prestito
         biblioteca.listaLibriInPrestito();
 
+        //Correzione
+        function restituzioneLibro(){
+            let libroPrestato=document.getElementById("libriprestati").value;
+            for(libr in biblioteca.vettLibPrestiti){
+                if(biblioteca.vettLibPrestiti[libr]===libroPrestato){
+                    biblioteca.vettLibPrestiti.splice(libr,1);
+                    alert("libro restituito");
+                }
+            }
+        }
+
         //Aggiunta libro all'inventario
         function aggiungiLibro(){
             let titolo=document.getElementById("Titolo").value;
@@ -200,6 +301,21 @@
             tbody.innerHTML=stringa;
             
     }
+
+    //Correzione
+    function elencoLibriInPrestito() {
+        let stringa = "";
+        let i = 0;
+
+        stringa += `<b>Elenco dei libri in prestito: </b>`;
+        stringa += `<br>`;
+        while(i < biblioteca.vettLibPrestiti.length) {
+            stringa += `${biblioteca.vettLibPrestiti[i].libro.titolo}</br>`;
+            i++;
+        }
+        output.innerHTML = stringa;
+    }
+
     </script>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
