@@ -9,7 +9,7 @@
 <h1>verifica balsano</h1>
 
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-    AGGIUNGI SOCIO
+    AGGIUNGI VEICOLO
   </button>
   <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -52,26 +52,49 @@
     </div>
 </div>
 </div>
-
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#SELECT">
+    RESTITUZIONE VEICOLO
+</button>
+<div class="modal fade" id="SELECT" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form>
+                <label for="exampleInputEmail1">VEICOLI NOLEGGIATI</label>
+                <br>
+                <select id="restituzione">
+                </select>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">CHIUDI</button>
+            <button type="button" class="btn btn-primary" onclick="restituisci_veicolo()">SALVA MODIFICHE</button>
+        </div>
+    </div>
+</div>
+</div>
 <body> 
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">    
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">    
-<table class="table" id="tab">
-    <thead>
-        <tbody>
-        <tr>                
-            <td> <b> tipo</b></td>
-            <td> <b> marca</b></td>
-            <td> <b> modello</b></td>
-            <td> <b> anno</b></td>
-            <td> <b> prezzo</b></td>                
-        </tr>
-    </tbody>
-    </thead>
-</table>
-
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">    
+    <table class="table" id="tab">
+        <thead>
+            <tbody>
+            <tr>                
+                <td> <b> tipo</b></td>
+                <td> <b> marca</b></td>
+                <td> <b> modello</b></td>
+                <td> <b> anno</b></td>
+                <td> <b> prezzo</b></td>                
+            </tr>
+        </tbody>
+        </thead>
+    </table>
     <script>
         class Veicolo{
             constructor(tipo, marca, modello, anno, prezzoNoleggioOrario){
@@ -159,34 +182,21 @@
         }
 
         compagniaNoleggio = new CompagniaNoleggio();
-
         const v1 = new Veicolo("auto", "fiat", "qubo", 2009 , 15)
         const v2 = new Veicolo("auto", "audi", "a5 sportback", 2022, 30)
         const v3 = new Veicolo("auto", "opel", "corsa", 2011, 23)
-
         compagniaNoleggio.aggiungiVeicolo(v1);
         compagniaNoleggio.aggiungiVeicolo(v2);
         compagniaNoleggio.aggiungiVeicolo(v3);
-
         const c1 = new Cliente("marek", "balsanova", "000000", "2")
         const c2 = new Cliente("matthew", "ranzany", "111111", "6")
-
         compagniaNoleggio.registraCliente(c1);
         compagniaNoleggio.registraCliente(c2);
-
         compagniaNoleggio.effettuaNoleggio(c1,v1);
         compagniaNoleggio.effettuaNoleggio(c2,v2);
-
+        compagniaNoleggio.effettuaNoleggio(c2,v3);
         compagniaNoleggio.restituisciVeicolo(c2, v2);
-
         compagniaNoleggio.elencoVeicoliNoleggiati(c1);
-
-
-        for(let i = 0; i < compagniaNoleggio.inventario.length; i++){
-            tbody=document.getElementById("tab");
-            let riga = `<tr><td>${compagniaNoleggio.inventario[i].tipo}</td><td>${compagniaNoleggio.inventario[i].marca}</td><td>${compagniaNoleggio.inventario[i].modello}</td><td>${compagniaNoleggio.inventario[i].anno}</td><td>${compagniaNoleggio.inventario[i].prezzoNoleggioOrario}</td>`;
-            tbody.innerHTML+=riga;
-        }
 
         function aggiungi_veicolo(){
             let tipo=document.getElementById("tipo").value;
@@ -199,12 +209,50 @@
             document.getElementById("anno").value = "";
             let prezzo=document.getElementById("prezzo").value;
             document.getElementById("prezzo").value = "";
-            //let v4=new veicolo(tipo, marca, modello, anno, prezzo);
+            const v4 = new Veicolo(tipo,marca,modello,anno,prezzo);
+            compagniaNoleggio.aggiungiVeicolo(v4);
             tbody=document.getElementById("tab");
-            let riga = `<tr><td>${tipo}</td><td>${marca}</td><td>${modello}</td><td>${anno}</td><td>${prezzo}</td><td>${corso1}</td></tr>`;
+            tbody.innerHTML="";
+            for(let i = 0; i < compagniaNoleggio.inventario.length; i++){            
+            let riga = `<tr><td>${compagniaNoleggio.inventario[i].tipo}</td><td>${compagniaNoleggio.inventario[i].marca}</td><td>${compagniaNoleggio.inventario[i].modello}</td><td>${compagniaNoleggio.inventario[i].anno}</td><td>${compagniaNoleggio.inventario[i].prezzoNoleggioOrario}</td>`;
             tbody.innerHTML+=riga;
+            }
         }
 
+        tbody=document.getElementById("tab");
+        for(let i = 0; i < compagniaNoleggio.inventario.length; i++){            
+            let riga = `<tr><td>${compagniaNoleggio.inventario[i].tipo}</td><td>${compagniaNoleggio.inventario[i].marca}</td><td>${compagniaNoleggio.inventario[i].modello}</td><td>${compagniaNoleggio.inventario[i].anno}</td><td>${compagniaNoleggio.inventario[i].prezzoNoleggioOrario}</td>`;
+            tbody.innerHTML+=riga;
+        }
+        
+        function removeSelect(select, value){
+            var options = select.options;
+            for(let i = 0; i < options.length; i++){
+                if (options[i].value === value){
+                    select.remove(i);
+                    alert("veicolo restituito");
+                    break;
+                }
+            }
+        }
+       
+        var selezione=document.getElementById("restituzione");
+        for(let i=0; i<compagniaNoleggio.noleggi.length;i++){
+            var option=document.createElement("option");
+            option.innerHTML=compagniaNoleggio.noleggi[i].veicolo.modello;
+            selezione.appendChild(option);
+        }
+
+        function restituisci_veicolo(){
+            select=document.getElementById("restituzione");
+            veicoloR=document.getElementById("restituzione").value;
+            for(let i = 0; i < compagniaNoleggio.noleggi.length; i++){
+                if(veicoloR == compagniaNoleggio.noleggi[i].veicolo.modello){
+                    compagniaNoleggio.restituisciVeicolo(compagniaNoleggio.noleggi[i].cliente,compagniaNoleggio.noleggi[i].veicolo);
+                    removeSelect(select, veicoloR);
+                }
+            }
+        }
     </script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
