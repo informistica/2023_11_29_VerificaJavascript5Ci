@@ -16,6 +16,9 @@
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
         aggiungi libro
     </button>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal1">
+        restituisci libro
+    </button>
     <div class="modal face" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -28,24 +31,50 @@
             <div class="modal-body">
                  <form>
                     <div class="form-group">
-                        <label for="nome" class="col-form-label">titolo</label>
-                        <input type="text" class="form-control" id="nome" aria-describedby="">
+                        <label for="titolo" class="col-form-label">titolo</label>
+                        <input type="text" class="form-control" id="titolo" aria-describedby="">
                     </div>
                     <div class="form-group">
-                        <label for="cognome" class="col-form-label">autore</label>
-                        <input type="text" class="form-control" id="cognome">
+                        <label for="autore" class="col-form-label">autore</label>
+                        <input type="text" class="form-control" id="autore">
                     </div>
                     <div class="form-group">
-                        <label for="iscrizione" class="col-form-label">genere</label>
-                        <input type="text" class="form-control" id="iscrizione">
+                        <label for="genere" class="col-form-label">genere</label>
+                        <input type="text" class="form-control" id="genere">
                     </div>
                     <div class="form-group">
-                        <label for="quota" class="col-form-label">anno di pubblicazione</label>
-                        <input type="text" class="form-control" id="quota">
+                        <label for="annoPubblicazione" class="col-form-label">anno di pubblicazione</label>
+                        <input type="text" class="form-control" id="annoPubblicazione">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-dismiss="modal">chiudi</button>
                         <button type="button" class="btn btn-secondary" onclick="aggiungi()">aggiungi</button>
+                      </div>
+                </div>
+            </div>
+        </form>
+        </div>
+    </div>
+
+    <div class="modal face" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">restituisci libro</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                 <form>
+                    <div class="form-group">
+                        <select class="form-control" id="titoloPrestito" aria-describedby="">
+                        </select>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">chiudi</button>
+                        <button type="button" class="btn btn-secondary" onclick="restituisciLibroSelect()">restituisci libro</button>
                       </div>
                 </div>
             </div>
@@ -100,7 +129,7 @@
                 }
 
             restituisciLibroLettore(libro){
-                        prestitiLettore.splice(libro);
+                        prestitiLettore.splice(libro,1);
                 }
                 }
     class biblioteca{
@@ -157,6 +186,7 @@
         }
             let biblioteca1=new biblioteca();
             let sl='';
+            let prestatoSelect;
             let titolo, autore, genere, annoPubblicazione, l;
             let libro1=new libro("il sistema periodico","Levi","biografia","1960");
             let libro2=new libro("1984","George","romanzo","1949");
@@ -187,29 +217,46 @@
 
             biblioteca1.listaLibriInPrestito();
 
-            for(let i=0;i<biblioteca1.prestiti.length;i++){
-                l=biblioteca1.prestiti[i]
-            sl+=`<tr>`;
-            sl+=`<td>${l.titolo}</td>`;
-            sl+=`<td>${l.autore}</td>`;
-            sl+=`<td>${l.genere}</td>`;
-            sl+=`<td>${l.annoPubblicazione}</td>`;
-            sl+=`</tr>`;
-            document.getElementById("ta").innerHTML+=sl;
+            function listaBibliotecaPrestito(){
+                for(let i=0;i<biblioteca.prestiti.length;i++){
+                    l=biblioteca.prestiti[i]
+                    sl+=`<tr>`;
+                    sl+=`<td>${l.titolo}</td>`;
+                    sl+=`<td>${l.autore}</td>`;
+                    sl+=`<td>${l.genere}</td>`;
+                    sl+=`<td>${l.annoPubblicazione}</td>`;
+                    sl+=`</tr>`;
+                    document.getElementById("ta").innerHTML+=sl;
             }
-
+                for(let i=0;i<biblioteca.prestiti.length;i++){
+                    l=biblioteca.prestiti[i]
+                    document.getElementById("titoloPrestito").innerHTML+=`<option value="${libro}">${libro}</option>`
+                }
+        }
             function aggiungi(){
                 const titolo= document.getElementById("titolo").value
                 const autore= document.getElementById("autore").value
                 const genere= document.getElementById("genere").value
                 const annoPubblicazione= document.getElementById("annoPubblicazione").value
-        if(titolo=="" || autore=="" || genere=="" || annoPubblicazione=="" || isNaN(titolo)==false || isNaN(autore)==false || isNaN(genere)==true || isNaN(annoPubblicazione)==true)
+        if(titolo=="" || autore=="" || genere=="" || annoPubblicazione=="" || isNaN(titolo)==false || isNaN(autore)==false || isNaN(genere)==false || isNaN(annoPubblicazione)==true)
             alert("inserire correttamente i dati")
         else{
             l=new libro(titolo,autore,genere,annoPubblicazione);
-            biblioteca1.aggiungiLibro(l);
+            biblioteca.aggiungiLibro(l);
+            alert("libro inserito")
+
             }
            
+            }
+            function restituisciLibroSelect(){
+                const prestatoSelect=document.getElementById("").value
+                for(lbs in biblioteca.prestiti){
+                    if(biblioteca.prestiti[lbs]==prestatoSelect){
+                        biblioteca.prestiti.splice(lbs,1);
+                        biblioteca.listaBibliotecaPrestito();
+
+                    }
+                }
             }
         
 </script>
