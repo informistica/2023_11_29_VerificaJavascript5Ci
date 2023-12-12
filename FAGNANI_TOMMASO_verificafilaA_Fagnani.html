@@ -246,6 +246,10 @@ class Biblioteca {
         
     }
 
+    
+
+
+
     function mostraInventario() {
         var tabella=document.createElement("table");
         var thead=document.createElement("thead");
@@ -277,23 +281,45 @@ class Biblioteca {
     //18.Aggiungere un libro all'inventario
 
     function aggiungiLibroInventario(){
+
+        var t=document.getElementById("tab2");
+        t.innerHTML = "";
+
+        var thead=document.createElement("thead");
+        var th=document.createElement("th");
+        
+        th.append("INVENTARIO LIBRI");
+        t.append(th);
+        
+       
         titolo=document.getElementById("titolo").value;
         autore=document.getElementById("autore").value;
         genere=document.getElementById("genere").value;
         anno=document.getElementById("annoPubblicazione").value;
-        tabella=document.getElementById("tab2");
-
+        
         l = new Libro(titolo,autore,genere,anno);
         biblioteca.aggiungiLibro(l);
 
-        biblioteca.inventario.push(l);
+        console.log(biblioteca.inventario.length)
+        for(var j=0; j<biblioteca.inventario.length; j++ ){
+            var tr=document.createElement("tr");
+            var td4=document.createElement("td");
+            var td5=document.createElement("td");
+            var td6=document.createElement("td");
+            var td=document.createElement("td");
+            td.append(biblioteca.inventario[j].titolo)
+            td4.append(biblioteca.inventario[j].autore)
+            td5.append(biblioteca.inventario[j].annoPubblicazione)
+            td6.append(biblioteca.inventario[j].disponibile)
+            tr.append(td,td4,td5,td6);
+            t.append(tr);
 
-        var tr=document.createElement("tr");
-        var td=document.createElement("td");
+        }
         
-        td.append(l.titolo)
-        tr.append(td);
-        tabella.append(tr);
+
+        document.getElementById("tab2").append(t);
+
+         
               
     }
 
@@ -316,11 +342,10 @@ class Biblioteca {
         for(let i = 0; i < biblioteca.prestiti.length; i++){
             if(libroDaRestituire == biblioteca.prestiti[i].libro.titolo)
                 biblioteca.restituisciLibro(biblioteca.prestiti[i].lettore, biblioteca.prestiti[i].libro );
-                rimuoviOptionSelect(select,libroDaRestituire);
-                
+                rimuoviOptionSelect(select,libroDaRestituire);  
         }
         
-        
+        tabella.innerHTML = "";
         mostraLibriInPrestito();
         
 
@@ -333,7 +358,7 @@ class Biblioteca {
         for (let i = 0; i < options.length; i++) {
             if (options[i].value === value) {
                 select.remove(i);
-                alert("Socio rimosso dalla select")
+                alert("libro rimosso dalla select")
                 break;
             }
         }
