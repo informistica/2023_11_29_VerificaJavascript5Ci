@@ -25,26 +25,40 @@
             <input type="an" class="form-control" id="anno" placeholder="inserire anno di pubblicazione">
         </div>
         <div class="form-group">
-            <label for="disp">disponibilità</label>
-            <input type="disp" class="form-control" id="disponibile" placeholder="true or false">
+            <label for="disp">selezionare disponibilità</label>
+            <select name="disp" id="disponibile" class="form-control">
+                <option value = "true" >true</option>
+                <option value = "false" >false</option>
+            </select>
         </div>
     </form>
 
     <button type="button" onclick="aggiungi()">Add book</button>
 
     <table border="1" class="table table-striped">
+        <tr>
+            <th>Titolo</th>
+            <th>Autore</th>
+            <th>Genere</th>
+            <th>AnnoPubblicazione</th>
+            <th>Disponibile</th>
+        </tr>
         <tbody id="tbody">
-            <tr>
-                <th>titolo</th>
-                <th>autore</th>
-                <th>genere</th>
-                <th>annoPubblicazione</th>
-                <th>disponibile</th>
-            </tr>
         </tbody>
     </table>
 
     <button type="button" onclick="tabella()">Add</button>
+    <br>
+    <form>
+        <div class="form-group">
+            <label for="disp">selezionare libro da restituire</label>
+            <select name="disp" id="selectRestituzione" class="form-control">
+            </select>
+        </div>
+    </form>
+    <button type="button" onclick="visualizzaPrestiti()">visualizza prestiti</button>
+    <br>
+    <button type="button" onclick="restituzione()">give back</button>
 
     <script>
         //1
@@ -135,36 +149,31 @@
 
         //17
         function tabella(){
+            tbody.innerHTML="";
             for(let i=0;i<biblioteca.lunghezza();i++){
                 let titolo=biblioteca.prestiti[i].titolo; 
                 let autore=biblioteca.prestiti[i].autore;
                 let genere=biblioteca.prestiti[i].genere;
                 let annoPubblicazione=biblioteca.prestiti[i].annoPubblicazione;
-                let disponibile=biblioteca.prestiti[i].disponibile; 
-                if(disponibile=="true") 
-                    disponibile=true;
-                else
-                    disponibile=false;  
+                let disponibile=biblioteca.prestiti[i].disponibile;  
+
                 stringa=`<tr><td>${titolo}</td>`;
                 stringa+=`<td>${autore}</td>`;
                 stringa+=`<td>${genere}</td>`;
                 stringa+=`<td>${annoPubblicazione}</td>`;
-                stringa+=`<td>${disponibile}€</td></tr>`;
+                stringa+=`<td>${disponibile}</td></tr>`;
                 tbody.innerHTML+=stringa;  
             }
         }
 
         //18
         function aggiungi(){
+            let varDisp;
             let titolo=document.getElementById("titolo").value;
             let autore=document.getElementById("autore").value;
             let genere=document.getElementById("genere").value;
             let annoPubblicazione=document.getElementById("anno").value;
             let disponibile=document.getElementById("disponibile").value;
-            if(disponibile=="true") 
-                    disponibile=true;
-                else
-                    disponibile=false;
 
             let libroNuovo=new Libro(titolo,autore,genere,annoPubblicazione,disponibile);
 
@@ -178,6 +187,25 @@
             console.log("prestito eseguito");
         }
 
+        //19
+        function visualizzaPrestiti(){
+            var select=document.getElementById("selectRestituzione");
+            for(let i=0;i<biblioteca.lunghezza();i++){
+                var option=document.createElement("option");
+                option.innerHTML=biblioteca.prestiti[i].titolo;
+                select.appendChild(option);
+            }
+        }
+        function restituzione(){
+            let tito=document.getElementById("selectRestituzione");
+            let libroRestituzione=0;
+            for(let i=0;i<biblioteca.lunghezza();i++)
+                if(biblioteca.prestiti[i].titolo==tito)
+                    libroRestituzione=i;
+            biblioteca.restituisciLibro(biblioteca.lettori[libroRestituzione],biblioteca.prestiti[libroRestituzione]);
+
+        }
+       
         var biblioteca=new Biblioteca();
 
         //12
