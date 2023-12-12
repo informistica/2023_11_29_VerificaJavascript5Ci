@@ -132,12 +132,10 @@
             aggiungiPrestito(libro){
                 for(let libri in this.vetPrestiti){
                     if(this.vetPrestiti[libri]===libro.titolo){
-                        console.log("il libro non può essere prestato");
                         return false;
                     }
                 
                 }
-                console.log("Libro prestato");
                 this.vetPrestiti.push(libro);
                 libro.setDisponibilita(false);
                 return true;
@@ -146,12 +144,10 @@
                 for(let libri in this.vetPrestiti){
                     if(this.vetPrestiti[libri].titolo===libro.titolo){
                         this.vetPrestiti.splice(libri,1);
-                        console.log("Libro restituito");
                         libro.setDisponibilita(true);
                         return true;
                     }
                 }
-               console.log("Libro non trovato");
                return false;
             }
         }
@@ -230,7 +226,8 @@
         biblioteca.effettuaPrestito(lettore1,libro3);
         biblioteca.effettuaPrestito(lettore2,libro2);
         biblioteca.effettuaPrestito(lettore1,libro4);
-
+        biblioteca.effettuaPrestito(lettore2,libro4);
+        biblioteca.effettuaPrestito(lettore1,libro1);
         console.log(biblioteca.listaLibriInPrestito());
 
         biblioteca.restituisciLibro(lettore1,libro3);
@@ -259,6 +256,9 @@
                 
                 tbody.innerHTML += corpo;
             }
+            if(corpo==null){
+                alert("Non ci sono libri prestati");
+            }
         }
         for(let i=0; i<biblioteca.prestiti.length;i++){
             let libro=biblioteca.prestiti[i].titolo;
@@ -268,9 +268,14 @@
         function restituzioneLibro(){
             let libroPrestato=document.getElementById("libriprestati").value;
             for(lib in biblioteca.prestiti){
-                if(biblioteca.prestiti[lib]===libroPrestato){
+                if(biblioteca.prestiti[lib].titolo===libroPrestato){
                     biblioteca.prestiti.splice(lib,1);
                     alert("libro restituito");
+                    document.getElementById("libriprestati").innerHTML="";
+                    for(let i=0; i<biblioteca.prestiti.length;i++){
+                        let libro=biblioteca.prestiti[i].titolo;
+                            document.getElementById("libriprestati").innerHTML+=`<option value="${libro}">${libro}</option>`;    
+                        }
                 }
             }
         }
@@ -281,9 +286,17 @@
             let anno=document.getElementById("anno").value;
             let disponibilita=true;
             let libro=new Libro(titolo,autore,genere,anno,disponibilita);
+            let corpo;
+            tbody.innerHTML = "";
             biblioteca.aggiungiLibro(libro);
             alert("Libro aggiunto con successo");
-
+            corpo=`<tr><td>${titolo}</td>`;
+            corpo+=`<td>${autore}</td>`;
+            corpo+=`<td>${genere}</td>`;
+            corpo+=`<td>${anno}</td>`;
+            corpo+=`<td>${disponibilita}</td></tr>`;
+            
+            tbody.innerHTML += corpo;
             document.getElementById("titolo").value="";
             document.getElementById("autore").value="";
             document.getElementById("genere").value="";
