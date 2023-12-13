@@ -225,13 +225,13 @@
         }
 
         effettuaNoleggio(cliente, veicolo){
-            this.noleggi.push(veicolo);
+            this.veicoliNoleggiati.push(veicolo);
             this.inventario.pop(veicolo);
             cliente.noleggiaVeicolo(veicolo);
         }
 
         restituisciVeicolo(cliente, veicolo){
-            this.noleggi.pop(veicolo);
+            this.veicoliNoleggiati.pop(veicolo);
             this.inventario.push(veicolo);
             cliente.restituisciVeicolo(veicolo);
         }
