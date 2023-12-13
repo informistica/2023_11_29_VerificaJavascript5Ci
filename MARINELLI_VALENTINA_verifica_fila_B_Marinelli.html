@@ -86,7 +86,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
-                    <button type="button" class="btn btn-primary"  onclick="mostraNoleggiati()">Seleziona</button>
+                    <button type="button" class="btn btn-primary"  onclick="restituireVeicolo()">Seleziona</button>
                 </div>
             </div>
         </div>
@@ -278,7 +278,6 @@
             th5.append("Prezzo Noleggio");
             tab.append(th1,th2,th3,th4,th5);
             for (let i = 0; i < compagnia.inventario.length; i++) {
-                console.log(compagnia.inventario[i])
                 var tr=document.createElement("tr");
                 var td1=document.createElement("td");
                 var td2=document.createElement("td");
@@ -318,7 +317,6 @@
             th5.append("Prezzo Noleggio");
             tab.append(th1,th2,th3,th4,th5);
             for (let i = 0; i < compagnia.noleggi.length; i++) {
-                console.log(compagnia.noleggi[i])
                 var tr=document.createElement("tr");
                 var td1=document.createElement("td");
                 var td2=document.createElement("td");
@@ -332,6 +330,36 @@
                 td5.append(compagnia.noleggi[i].veicolo.prezzoNoleggioOrario);
                 tr.append(td1,td2,td3,td4,td5);
                 tab.append(tr);   
+            }
+        }
+
+        function restituireVeicolo(){
+            var trovato = false;
+            var select = document.getElementById("noleggiato");
+            var veicolo = document.getElementById("noleggiato").value;
+            for(let i=0;i<compagnia.noleggi.length;i++){
+                if(compagnia.noleggi[i].veicolo.marca==veicolo){
+                    trovato=true;
+                    v = compagnia.noleggi[i].veicolo;
+                    c = compagnia.noleggi[i].cliente;
+                    rimuoviSelect(select,veicolo);
+                }
+            }
+            if(trovato){
+                compagnia.restituisceVeicolo(c,v);
+                alert("Veicolo noleggiato restituito");
+            }
+            
+        }
+
+        function rimuoviSelect(select, value) {
+            let options = select.options;
+            for (let i = 0; i < options.length; i++) {
+                if (options[i].value === value) {
+                    select.remove(i);
+                    alert("Veicolo noleggiato rimosso dalla lista")
+                    break;
+                }
             }
         }
 
