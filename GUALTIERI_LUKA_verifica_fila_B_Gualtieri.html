@@ -125,7 +125,7 @@
                 </div>
                 <div>
                     <label for="AutoNoleggiate">Auto Noleggiate</label>
-                    <select class="form-control" id="noleggiate">
+                    <select class="form-control" id="noleggiate" onclick="">
                     </select>
                 </div>
             </form>
@@ -200,12 +200,12 @@
         }
 
         noleggiaVeicolo(veicolo){
-            this.noleggiEffettuati.push(veicolo);
+            this.veicoliNoleggiatiCliente.push(veicolo);
         }
 
         restituisciVeicolo(veicolo){
-            if(this.noleggiEffettuati.length > 0)
-                this.noleggiEffettuati.pop(veicolo); 
+            if(this.veicoliNoleggiatiCliente.length > 0)
+                this.veicoliNoleggiatiCliente.pop(veicolo); 
         }
     }
 
@@ -299,8 +299,16 @@
         for(let i=0; i<compagniaNoleggio.clienti.length;i++){
             stringa += `<option value=${i}>${compagniaNoleggio.clienti[i].nome}</option>`;
         }
+
+        let stringa2 = "";
+        for(let i=0; i<compagniaNoleggio.veicoliNoleggiati.length;i++){
+            stringa2 += `<option value=${i}>${compagniaNoleggio.veicoliNoleggiati[i].marca, compagniaNoleggio.veicoliNoleggiati[i].modello}</option>`;
+        }
+        
         document.getElementById("clientiRestituzione").innerHTML=stringa;
         document.getElementById("clientiNoleggia").innerHTML=stringa;
+        document.getElementById("disponibili").innerHTML=stringa2;
+        document.getElementById("noleggiate").innerHTML=stringa2;
 
         function modificaTabella(){
             let tbody=document.getElementById("outputVeicoli");
@@ -324,7 +332,6 @@
 
             let veicoloAggiunto = new Veicolo(tipo, marca, modello, anno, prezzoOra);
             compagniaNoleggio.aggiungiVeicolo(veicoloAggiunto);
-        
         }
 
         function restituisciVeicolo(){
@@ -335,7 +342,7 @@
 
         function noleggiaVeicolo(){
             let cliente = compagniaNoleggio.clienti[document.getElementById("clientiRestituzione").value];
-            let autonoleggiata = cliente.veicoliNoleggiatiCliente[document.getElementById("noleggiate").value];
+            let autonoleggiata = cliente.veicoliNoleggiati[document.getElementById("disponibili").value];
             compagniaNoleggio.effettuaNoleggio(cliente, autonoleggiata);
         }
     </script>
